@@ -1,0 +1,1 @@
+This repository is a RIPPS2 theme kit. Read and follow AGENTS.md at the repository root before changing anything: it holds the rules, and docs/THEME_KEYS.md documents every theme key and effect the engine supports.

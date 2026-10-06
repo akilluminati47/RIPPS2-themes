@@ -5,7 +5,7 @@
 Copies the folder and rewrites conf_theme.cfg: aligned=1 elements (centred on x) move to 640 - x,
 aligned=0 elements (x is the left edge) to 640 - x - width, tilt_x follows, POS_MID stays. Negative x
 (counted from the right) is resolved first. It is a draft: text that should stay left-aligned inside a
-panel, or art with a direction, may want a hand touch afterwards -- check it with preview_theme.py.
+panel, or art with a direction, may want a hand touch afterwards: run check_theme.py, then look at it in PCSX2 or on a PS2.
 """
 import os, re, shutil, sys
 
