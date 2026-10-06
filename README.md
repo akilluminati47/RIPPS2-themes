@@ -12,7 +12,7 @@ people and coding agents alike can add a theme and know it will load before it r
 
 | Theme | Look | Needs RIPPS2 |
 |---|---|---|
-| **Adapt** / **Adapt Rx** | akilluminati47's Adapt (RiptOPL): each game's background art under frosted glass (zoomed, not stretched, in 16:9) with Adapt's side bar as a frosted strip, the game's cover in RIPPS2's case with its reflection and the disc on one side, the list on clear glass on the other (Rx: mirrored). Info page on clear glass with 4:3 screenshots, tipping with the right stick as one plane; page morphs between them, Settings over the pillars, no towers on the game pages, the source name pops in. Art eases in. | build 80 |
+| **Adapt** / **Adapt Rx** | akilluminati47's Adapt (RiptOPL): each game's background art under frosted glass (zoomed, not stretched, in 16:9) with Adapt's side bar as a frosted strip, the game's cover in RIPPS2's case with its reflection and the disc on one side, the list on clear glass on the other (Rx: the list and the case swap sides, the side bar stays on the left). Info page on clear glass with 4:3 screenshots, tipping with the right stick as one plane; page morphs between them, Settings over the pillars, no towers on the game pages, the source name pops in (from build 81 as a toast in the middle of the page, ALL GAMES, HDD GAMES...). Art eases in. | build 80 |
 | **RIPgrid** | Adapt's frosted screen and side bar with the games as a 4x2 cover grid; the selection breathes with a soft glow and tips with the right stick, games without a cover show as glass tiles with their name, and Circle cycles the sources. | build 80 |
 
 Install: copy a `thm_...` folder into a `THM` folder on your drive (USB, HDD, MMCE, memory card), as

@@ -56,9 +56,10 @@ def block(name, **kv):
     return "\n".join(out)
 
 
-def backdrop(fam, rx):
-    """Background, the frosted screen, the side bar's strip and rule: indices 0-3 of main and info."""
-    bar_x, rule_x = (614, 600) if rx else (0, 28)
+def backdrop(fam):
+    """Background, the frosted screen, the side bar's strip and rule: indices 0-3 of main and info. The
+    side bar is on the left in every theme of the family, Adapt Rx included (it mirrors the content)."""
+    bar_x, rule_x = 0, 28  # the strip 0-26, the rule 28-40: content starts at x 40
     return [
         block(fam + "0", type="Background", pattern="BG", widecrop=1),
         block(fam + "1", type="Ripps2PanelGlass", aligned=0, x=0, y=0, width=640, height=480,
@@ -78,13 +79,16 @@ def screenshot(name, pattern, x, y):
 
 
 def info(rx):
-    # the text panel sits clear of the side bar; the screenshots take the other side
-    gx = 195 if rx else 45    # glass left (395 wide: clear of the side bar and the screenshots)
+    # the text panel and the screenshots side by side, clear of the side bar. Rx swaps them, the side bar
+    # staying left: screenshots 56-226 (16 px from the bar), glass 242-622 (16 px gap, 18 px to the edge)
+    gw = 380 if rx else 395   # glass width
+    gx = 242 if rx else 45    # glass left
+    tw = gw - 20              # text width
     tx = gx + 10              # text left
     ax = gx + 15              # first attribute icon
-    sx = 106 if rx else 532   # screenshots' centre
-    els = backdrop("info", rx) + [
-        block("info4", type="Ripps2PanelGlass", aligned=0, x=gx, y=160, width=395, height=255,
+    sx = 141 if rx else 532   # screenshots' centre
+    els = backdrop("info") + [
+        block("info4", type="Ripps2PanelGlass", aligned=0, x=gx, y=160, width=gw, height=255,
               blur=1, tint=PANEL_TINT, frame=1, **INFO_TILT),
         block("info5", type="GameImage", pattern="LGO", x="POS_MID", y=100, aligned=1, width=300,
               height=125, **INFO_TILT),
@@ -93,13 +97,13 @@ def info(rx):
         block("info8", type="AttributeImage", attribute="Players", aligned=0, x=ax + 122, y=173, **INFO_TILT),
         # line_height: a description longer than its box rolls through it instead of running on
         block("info9", type="AttributeText", attribute="Description", aligned=0, display=2, x=tx, y=210,
-              width=375, height=100, wrap=1, line_height=19, font=1, **INFO_TILT),
+              width=tw, height=100, wrap=1, line_height=19, font=1, **INFO_TILT),
         block("info10", type="AttributeText", attribute="Developer", aligned=0, display=2, x=tx, y=330,
-              width=375, wrap=0, font=2, **INFO_TILT),
+              width=tw, wrap=0, font=2, **INFO_TILT),
         block("info11", type="AttributeText", attribute="Release", aligned=0, display=2, x=tx, y=358,
-              width=375, font=3, **INFO_TILT),
+              width=tw, font=3, **INFO_TILT),
         block("info12", type="AttributeText", attribute="Genre", display=2, aligned=0, x=tx, y=385,
-              width=375, font=2, **INFO_TILT),
+              width=tw, font=2, **INFO_TILT),
         block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=3),
         screenshot("info14", "SCR", sx, 226),
         screenshot("info15", "SCR2", sx, 358),
@@ -125,18 +129,22 @@ def common_tail(fam, start):
 
 
 def adapt(rx):
-    gx = 25 if rx else 188    # list glass
-    cx = 530 if rx else 110   # cover and disc centre
-    main = backdrop("main", rx) + [
-        block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=76, width=432, height=309,
+    # Rx: the list left and the case right, the side bar staying left; even 16 px gaps from the bar to
+    # the glass (56-464), the glass to the case (480-623) and the case to the edge
+    gw = 408 if rx else 432   # list glass width
+    gx = 56 if rx else 188    # list glass left
+    cx = 552 if rx else 110   # cover and disc centre
+    lw = gw - 24 if rx else 420  # the list inside the glass
+    main = backdrop("main") + [
+        block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=76, width=gw, height=309,
               blur=1, tint=PANEL_TINT, frame=1),
         block("main5", type="ItemCover", **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
         block("main6", type="ItemIcon", aligned=1, scaled=1, x=cx, y=96, width=120, height=120,
               tilt=1, tilt_x=cx, tilt_y=200),
-        block("main7", type="ItemsList", x=gx + 12, y=88, aligned=0, width=420, height=285, font=4),
+        block("main7", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
     ] + common_tail("main", 8)
-    # apps: one wide glass list clear of the side bar, no cover or disc
-    ax = 24 if rx else 48
+    # apps: one wide glass list clear of the side bar (left in both), no cover or disc
+    ax = 48
     apps = [
         block("appsMain4", type="Ripps2PanelGlass", aligned=0, x=ax, y=40, width=568, height=368,
               blur=1, tint=PANEL_TINT, frame=1),
@@ -150,7 +158,7 @@ def adapt(rx):
 def ripgrid(rx):
     # 4 x 2 covers centred in the room the side bar leaves; the highlight says which game it is, and only
     # it tips with the right stick (about its own centre; tilt_scale lets it turn further than a page)
-    main = backdrop("main", rx) + [
+    main = backdrop("main") + [
         block("main4", type="Grid", pattern="COV", x=340, y=62, width=120, height=168,
               columns=4, rows=2, spacing=16, font=4, tilt=1, tilt_scale=160),
         block("main5", type="ItemsList", x="POS_MID", y=45, width="DIM_INF", height=24, aligned=1,
