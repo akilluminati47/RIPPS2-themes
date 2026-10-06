@@ -99,7 +99,7 @@ out falls back to its `default_font`.
 | `font9` | a title in true case (RetroAchievements) |
 | `font10` | About's small print |
 | `font11` | the CD player's track title |
-| `font14` | the **view word**: L3's ALL / PS1 / PS2 and the Pop In source toast (64 px in the built-in themes) |
+| `font14` | the **view word**: L3's ALL / PS1 / PS2 and the Pop In source toast. A theme without `font14` gets RIPPS2 Sleek Bold at 64 px here (build 81; `font14_size` still sets it), not its default font |
 | `font15` | typed text and tooltips, in true lowercase |
 
 ## Element types RIPPS2 adds
