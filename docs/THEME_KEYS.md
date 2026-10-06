@@ -150,7 +150,7 @@ without one.
 | `reflection`, `reflection_offset` | cover elements | RiptOPL | A mirror image under the art, fading out; the offset moves it down. |
 | `alpha` | `GameImage` | 66 | Opacity 0-128. |
 | `widecrop` | `Background` | 79 | `1`: on a 16:9 picture 4:3 art zooms (its middle three quarters of height) instead of stretching. Frosted panels follow the crop. |
-| `slide` | `GameImage` | 59 | Info-page slideshow position 1-4: the art crossfades between the slides. |
+| `slide` | `GameImage` | 59 | Slideshow position 1-4: the page's slides take turns (5 s each, a 1 s crossfade), each in its own place with its own overlay and reflection. Any page: the info page's art (BG, SCR, SCR2), or a game list's case showing the front cover (`COV`) then the back (`COV2`), as Adapt does (build 81). A game without a slide's art skips it. |
 | `hidden` | `ItemsList` | RiptOPL | The list drives selection but is not drawn (Coverflow, Grid). |
 | `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text's line step; centre the block in its height. With either set, text longer than its box **rolls** through it. One-line text always scrolls in its room. |
 | `item_height` | `ItemsList` | 59 | Row pitch. |

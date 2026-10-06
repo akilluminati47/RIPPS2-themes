@@ -10,14 +10,17 @@ Layers, back to front, on the game list and the info page alike:
 
 The whole info page (panel, logo, badges, text, screenshots) tips with the right stick as one plane about
 the page's centre; the hint row and the backdrop hold still. Adapt's cover is RIPPS2's case (case +
-case_overlay, its reflection below), tipping with the disc. On RIPgrid only the chosen cover tips.
+case_overlay, its reflection below), tipping with the disc; on the game list the case shows the front
+cover, then the back (COV2), crossfading as the info page's slideshow does (slide=1, 2). The info page
+sits on the other side from the game list's text: Adapt's text right, Adapt Rx's left. On RIPgrid only
+the chosen cover tips (front only), and its type is RIPPS2 Sleek from the ELF (builtin: fonts).
 """
 import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
 HEAD = """# Theme Name: {name}
-# Made by: akilluminati47 (Adapt RiptOPL, 8/27/2026), RIPPS2 edition (build 80)
+# Made by: akilluminati47 (Adapt RiptOPL, 8/27/2026), RIPPS2 edition (build 81)
 # [case.png] [case_overlay.png] RiptOPL's built-in case (b2); [SCR43.png] Adapt's screenshot frame at 4:3
 # RIPPS2: each game's art under frosted glass (a full-screen Ripps2PanelGlass, blur=1), a frosted side
 # bar, clear glass panels under the text, page morphs between the list and the info page, the pillars
@@ -29,12 +32,29 @@ text_color=#FFFFFF
 ui_text_color=#C4DAFF
 towers=0
 source_name=pop
-default_font=a.ttf
+{fonts}"""
+
+# Adapt's own type (its TTFs ship in the theme)
+ADAPT_FONTS = """default_font=a.ttf
 default_font_size=17
 font1=b.ttf
 font2=c.ttf
 font3=d.ttf
 font4=b.ttf
+font4_size=20
+"""
+# RIPgrid: RIPPS2 Sleek, the face made for RIPPS2, loaded from the ELF (nothing to ship). The same slots,
+# in its weights: Sleek for the source name and hints, Sleek Bold for the grid's names and the release
+# line, Sleek Bold Case (a true lowercase) for descriptions and anything typed.
+RIPGRID_FONTS = """default_font=builtin:ripps2sleek
+default_font_size=17
+font1=builtin:ripps2sleekcase
+font1_size=16
+font2=builtin:ripps2sleek
+font2_size=17
+font3=builtin:ripps2sleekbold
+font3_size=16
+font4=builtin:ripps2sleekbold
 font4_size=20
 """
 
@@ -105,9 +125,11 @@ def info(rx):
         block("info12", type="AttributeText", attribute="Genre", display=2, aligned=0, x=tx, y=385,
               width=tw, font=2, **INFO_TILT),
         block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=3),
-        screenshot("info14", "SCR", sx, 226),
-        screenshot("info15", "SCR2", sx, 358),
-        block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=ax + 303, y=330, **INFO_TILT),
+        # a hairline under the logo (its box ends at y 162), the lower frame still clear of the hints
+        screenshot("info14", "SCR", sx, 230),
+        screenshot("info15", "SCR2", sx, 362),
+        # the badge (54 px) 16 px inside the panel's right edge, whichever width the panel is
+        block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=gx + gw - 70, y=330, **INFO_TILT),
         block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=173, **INFO_TILT),
         block("info18", type="AttributeImage", attribute="Aspect", aligned=0, x=ax + 222, y=173, **INFO_TILT),
     ]
@@ -144,20 +166,24 @@ def adapt(rx):
     main = backdrop("main") + [
         block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=76, width=gw, height=309,
               blur=1, tint=PANEL_TINT, frame=1),
-        block("main5", type="ItemCover", **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
+        # the case: the front cover, then the back, crossfading (the slideshow; a game with no back
+        # cover keeps its front). The front is the list's cover (COV), so it still loads first.
+        block("main5", type="GameImage", pattern="COV", slide=1, **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
+        block("main6", type="GameImage", pattern="COV2", slide=2, **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
         # the disc: clear of the LAUNCH DISC label above (y 30) and of the case below (its top at 161)
-        block("main6", type="ItemIcon", aligned=1, scaled=1, x=cx, y=100, width=112, height=112,
+        block("main7", type="ItemIcon", aligned=1, scaled=1, x=cx, y=100, width=112, height=112,
               tilt=1, tilt_x=cx, tilt_y=200),
-        block("main7", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
-    ] + common_tail("main", 8)
+        block("main8", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
+    ] + common_tail("main", 9)
     # apps: one wide glass list clear of the side bar (left in both), no cover or disc
     ax = 48
     apps = [
         block("appsMain4", type="Ripps2PanelGlass", aligned=0, x=ax, y=40, width=568, height=368,
               blur=1, tint=PANEL_TINT, frame=1),
-        block("appsMain5", type="ItemCover", enabled=0),
-        block("appsMain6", type="ItemIcon", enabled=0),
-        block("appsMain7", type="ItemsList", x=ax + 10, y=75, aligned=0, width=548, height=323, font=4),
+        block("appsMain5", type="GameImage", enabled=0),
+        block("appsMain6", type="GameImage", enabled=0),
+        block("appsMain7", type="ItemIcon", enabled=0),
+        block("appsMain8", type="ItemsList", x=ax + 10, y=75, aligned=0, width=548, height=323, font=4),
     ]
     return main, apps
 
@@ -174,8 +200,8 @@ def ripgrid(rx):
     return main, []
 
 
-def write(folder, name, main, mainApps, infoEls, infoApps, extra=""):
-    text = HEAD.format(name=name) + extra + "\n" + "\n".join(main + infoEls + mainApps + infoApps) + "\n"
+def write(folder, name, main, mainApps, infoEls, infoApps, extra="", fonts=ADAPT_FONTS):
+    text = HEAD.format(name=name, fonts=fonts) + extra + "\n" + "\n".join(main + infoEls + mainApps + infoApps) + "\n"
     with open(os.path.join(ROOT, folder, "conf_theme.cfg"), "w", newline="\n") as f:
         f.write(text)
     print("wrote", folder)
@@ -186,7 +212,13 @@ if __name__ == "__main__":
     for folder, name, make, rx in (("thm_Adapt", "Adapt", adapt, 0), ("thm_Adapt Rx", "Adapt Rx", adapt, 1),
                                    ("thm_RIPgrid", "RIPgrid", ripgrid, 0)):
         m, ma = make(rx)
-        i, ia = info(rx)
+        # the info page puts its text on the other side from the game list's: Adapt (list right) gets
+        # text right and pictures left, Adapt Rx (list left) the reverse; RIPgrid keeps text left
+        i, ia = info(1 - rx) if make is adapt else info(rx)
         # Rx: LAUNCH DISC at the bar's right end, over its disc (a default: the user's own order wins)
         extra = "category_order=memory_files_first\n" if rx else ""
-        write(folder, name, m, ma, i, ia, extra)
+        if make is ripgrid:
+            extra += ("# RIPgrid's type: RIPPS2 Sleek (Regular, Bold, Bold Case), built into RIPPS2 (builtin: fonts)\n"
+                      "# [circle.png] [cross.png] [square.png] [triangle.png] [select.png] from the Grunge theme;\n"
+                      "# [start.png] drawn to match\n")
+        write(folder, name, m, ma, i, ia, extra, RIPGRID_FONTS if make is ripgrid else ADAPT_FONTS)

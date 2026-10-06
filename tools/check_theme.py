@@ -20,6 +20,10 @@ import re
 import struct
 import sys
 
+# fonts compiled into RIPPS2 (src/fntsys.c): a theme names them as builtin:<name> and ships nothing
+BUILTIN_FONTS = {"builtin:ripps2", "builtin:ripps2sleek", "builtin:ripps2sleekbold", "builtin:ripps2sleekcase",
+                 "builtin:ripflow", "builtin:ripflowbold"}
+
 TYPES = {"AttributeText", "StaticText", "AttributeImage", "GameImage", "StaticImage", "Background", "MenuIcon",
          "MenuText", "ItemsList", "ItemIcon", "ItemCover", "ItemText", "HintText", "InfoHintText", "LoadingIcon",
          "BdmIndex", "GameCountText", "Coverflow", "Ripps2PanelGlass", "Grid"}
@@ -65,6 +69,10 @@ def main(folder):
         return any(os.path.isfile(os.path.join(folder, name + ext)) for ext in (".png", ".jpg", ""))
 
     for k, v in glob.items():
+        if (k == "default_font" or re.match(r"font\d+$", k)) and v.startswith("builtin:"):
+            if v not in BUILTIN_FONTS:
+                errors.append("font %s=%s: RIPPS2 has no such built-in font (%s)" % (k, v, ", ".join(sorted(BUILTIN_FONTS))))
+            continue
         if (k == "default_font" or re.match(r"font\d+$", k)) and not os.path.isfile(os.path.join(folder, v)):
             errors.append("font %s=%s is missing" % (k, v))
     # Colors and More from the theme (build 81; source_name=pop since 80): each must be a value RIPPS2 knows
