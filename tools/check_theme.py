@@ -8,8 +8,8 @@ Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPP
   number, so a number past the base family's last is never read;
 - every element type is one the engine knows;
 - every image the theme names (default=, overlay=, bg/attribute folders) and every font exists;
-- RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing on
-  Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
+- RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing/back_pattern
+  on Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
 - a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one;
 - source_name, color_theme, category_bar, button_hints, dpad_glyphs and category_order hold values RIPPS2 knows;
 - every PNG is an 8-bit palette PNG (a warning: RGBA ones cost four times the VRAM; tools/png8.py).
@@ -32,7 +32,7 @@ FAMILIES = ["main", "info", "appsMain", "appsInfo", "favsMain", "favsInfo", "vcd
 # main and info are read 0, 1, 2... until a number is missing; every other family replaces the element of
 # the same number in its base family, and only numbers the base family has are read
 BASE = {f: ("info" if f.endswith("Info") else "main") for f in FAMILIES if f not in ("main", "info")}
-GRID_KEYS = {"columns", "rows", "spacing"}
+GRID_KEYS = {"columns", "rows", "spacing", "back_pattern"}
 GLASS_KEYS = {"blur", "tint", "tint_color", "frame"}  # build 78-79
 
 
@@ -122,11 +122,13 @@ def main(folder):
             if t == "Grid" and "default" in e:
                 warnings.append("%s: a Grid default= puts that picture on every game without art (build 79 shows a glass tile with the name)" % where)
             if GRID_KEYS & set(e) and t != "Grid":
-                warnings.append("%s: columns/rows/spacing work only on Grid" % where)
+                warnings.append("%s: columns/rows/spacing/back_pattern work only on Grid" % where)
             if t == "Grid":
                 c, r = int(e.get("columns", 4)), int(e.get("rows", 2))
                 if not (1 <= c <= 8 and 1 <= r <= 4):
                     errors.append("%s: columns 1-8 and rows 1-4 (got %d x %d)" % (where, c, r))
+                if "back_pattern" in e and not re.match(r"^(0|[A-Za-z0-9]+)$", e["back_pattern"]):
+                    errors.append("%s: back_pattern is an art suffix such as COV2 or SCR, or 0 (got %s)" % (where, e["back_pattern"]))
         if fam in ("main", "appsMain") and ({"Grid", "Coverflow"} & set(types)) and "ItemsList" not in types:
             errors.append("%s: a Grid/Coverflow page needs an ItemsList (hidden=1), else a visible default list is added" % fam)
 

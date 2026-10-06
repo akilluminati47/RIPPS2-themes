@@ -127,15 +127,17 @@ The game list as a page of covers in rows, backed by the cover art (`COV`).
 | `y` | 60 | The top of the first row. |
 | `width`,`height` | 104 x 146 | One cover. |
 | `columns` | 4 (1-8) | Covers across. |
-| `rows` | 2 (1-4) | Rows on screen. |
+| `rows` | 2 (1-4) | Rows on a page. Build 82: the grid moves by whole pages, the new page sliding in as the old one slides away (eased like RIPFLOW's carousel; off when Coverflow's animation speed is 0). |
 | `spacing` | 14 | Pixels between covers. |
 | `default` | none | A placeholder for games without art. Leave it out: those games get a clear glass tile with their name instead (build 79). |
 | `overlay`, `overlay_*`, `reflection` | | As on `ItemCover` (case art, a mirror under the selection). |
 | `font` | | The name on a no-art tile. |
 | `tilt*` | | Build 80: tips only the chosen cover, about its own centre (its glow with it). `tilt_scale` lets one cover turn further than a page. |
+| `back_pattern` | `COV2` | Build 82: the art on the back of a turned case. Hold the right stick to one side for 2 seconds and the chosen case turns over to it; it stays turned until held again. Any art suffix works (`SCR` puts a screenshot on the back); `0` leaves the cases unturnable. The back is asked for as soon as the front is in, from a cache of its own. |
 
 Controls on a Grid theme: Left / Right one cover, Up / Down one row, past the top or bottom row a new
-press switches drive, and the cancel button cycles the sources (the hint row says *Source*). A Grid
+press switches drive, the cancel button cycles the sources (the hint row says *Source*), and a 2-second
+right-stick hold turns the chosen case over (build 82). A Grid
 page **must also declare an `ItemsList` with `hidden=1`**: the engine adds a visible list to any page
 without one.
 
