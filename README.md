@@ -37,6 +37,7 @@ list for 4.2 seconds to step through the themes.
 | `tools/check_theme.py` | Will it load? Numbering, types, missing files, misplaced keys. |
 | `tools/preview_theme.py` | A PNG of the game list and info page, laid out as the engine does. |
 | `tools/mirror_theme.py` | Draft the other-side layout of a theme. |
+| `tools/png8.py` | Make every image an 8-bit palette PNG: RIPPS2 keeps those as 8-bit textures, a quarter of the VRAM. |
 | `tools/gen_adapt_family.py` | Writes the Adapt-family configs from one layout (edit it, not their `conf_theme.cfg`). |
 | `previews/` | The current previews. |
 

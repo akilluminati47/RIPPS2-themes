@@ -10,11 +10,13 @@ Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPP
 - every image the theme names (default=, overlay=, bg/attribute folders) and every font exists;
 - RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing on
   Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
-- a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one.
+- a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one;
+- every PNG is an 8-bit palette PNG (a warning: RGBA ones cost four times the VRAM; tools/png8.py).
 Exit code 1 on an error; warnings do not fail.
 """
 import os
 import re
+import struct
 import sys
 
 TYPES = {"AttributeText", "StaticText", "AttributeImage", "GameImage", "StaticImage", "Background", "MenuIcon",
@@ -112,6 +114,15 @@ def main(folder):
                     errors.append("%s: columns 1-8 and rows 1-4 (got %d x %d)" % (where, c, r))
         if fam in ("main", "appsMain") and ({"Grid", "Coverflow"} & set(types)) and "ItemsList" not in types:
             errors.append("%s: a Grid/Coverflow page needs an ItemsList (hidden=1), else a visible default list is added" % fam)
+
+    for root, _, files in os.walk(folder):  # RIPPS2 keeps 8-bit palette PNGs as 8-bit textures
+        for name in sorted(files):
+            if name.lower().endswith(".png"):
+                with open(os.path.join(root, name), "rb") as fh:
+                    head = fh.read(26)
+                if len(head) == 26 and (head[25], head[24]) != (3, 8):  # colour type 3 (palette), 8-bit
+                    warnings.append("%s is not an 8-bit palette PNG (4x the VRAM; tools/png8.py converts it)"
+                                    % os.path.relpath(os.path.join(root, name), folder))
 
     for w in warnings:
         print("WARN  " + w)

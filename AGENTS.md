@@ -22,5 +22,7 @@ RiptOPL's theme engine. Read these before changing anything.
 7. **The Adapt family** (Adapt, Adapt Rx, RIPgrid) is written by
    `tools/gen_adapt_family.py`: change the layout there and run it, never their `conf_theme.cfg` by hand.
 8. **Credit** every asset's maker in the `conf_theme.cfg` header and in `themes/README.md`.
-9. Images: PNG, 640x480 for full-screen pieces; 8-bit palette PNGs keep VRAM and load times down
-   (the frosted glass reads them fine). Fonts: TTF.
+9. Images: PNG, 640x480 for full-screen pieces, and **every PNG 8-bit palette**: RIPPS2 keeps those as
+   8-bit textures (a quarter of the VRAM of RGBA, quicker to load; the frosted glass reads them fine).
+   `python3 tools/png8.py themes/<folder>` converts the rest, alpha kept; the checker warns on any left.
+   Fonts: TTF.
