@@ -19,7 +19,7 @@ RiptOPL's theme engine. Read these before changing anything.
 6. **If a look needs something the keys cannot express**, it is an engine change in RIPPS2
    (`elf/patches/` there), not a theme hack. Add the key to THEME_KEYS.md with the build it lands in,
    teach `tools/check_theme.py` about it, and keep the theme working on builds without it where you can.
-7. **The Adapt family** (Adapt, Adapt Rx, RIPgrid, RIPgrid Rx) is written by
+7. **The Adapt family** (Adapt, Adapt Rx, RIPgrid) is written by
    `tools/gen_adapt_family.py`: change the layout there and run it, never their `conf_theme.cfg` by hand.
 8. **Credit** every asset's maker in the `conf_theme.cfg` header and in `themes/README.md`.
 9. Images: PNG, 640x480 for full-screen pieces; 8-bit palette PNGs keep VRAM and load times down

@@ -2,7 +2,7 @@
 
     python3 tools/check_theme.py "themes/thm_Adapt"
 
-Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 79):
+Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 80):
 - main and info are numbered 0, 1, 2... with no gap (the engine stops reading at the first missing
   number); every other family (appsMain, vcdInfo...) replaces its base family's element of the same
   number, so a number past the base family's last is never read;
@@ -64,6 +64,8 @@ def main(folder):
     for k, v in glob.items():
         if (k == "default_font" or re.match(r"font\d+$", k)) and not os.path.isfile(os.path.join(folder, v)):
             errors.append("font %s=%s is missing" % (k, v))
+    if "source_name" in glob and glob["source_name"] != "pop":
+        errors.append("source_name=%s: the one value is pop (build 80)" % glob["source_name"])
     if glob.get("use_settings_bg") == "1" and not img("settings_bg"):
         errors.append("use_settings_bg=1 but settings_bg.png is missing")
 
@@ -89,7 +91,7 @@ def main(folder):
             types.append(t)
             if t not in TYPES:
                 errors.append("%s: unknown type %s" % (where, t))
-            for key in ("default", "overlay"):
+            for key in ("default", "overlay", "overlay2"):
                 if key in e and not img(e[key]):
                     errors.append("%s: %s=%s is missing" % (where, key, e[key]))
             if GLASS_KEYS & set(e) and t != "Ripps2PanelGlass":

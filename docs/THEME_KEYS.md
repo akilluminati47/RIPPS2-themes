@@ -16,6 +16,7 @@ makes `x`,`y` its top-left corner. `scaled=1` narrows width for 16:9 (widescreen
 | Key | Values | Build | What it does |
 |---|---|---|---|
 | `towers` | `0` / `1` (default 1) | 78 | `0`: the game pages never show RIPPS2's pillars. Where a page has no image (a game without background art, or while its art fades in) the theme's `bg_color` shows instead. Settings still show the pillars behind glass unless the theme ships `settings_bg`. |
+| `source_name` | `pop` | 80 | The theme's Source Name (ALL GAMES, HDD GAMES...) is Pop In: it rises in letter by letter, as L3's view word does, when the page opens or the source changes, then stays. It stands in for the setting's Shown; a user who picks Fade When Idle, Hidden or Pop In in Colors and More gets that. |
 | `use_settings_bg` | `0` / `1` | RiptOPL | `1` + `settings_bg.png`: Settings over that picture. Leave it out to get the pillars behind RIPPS2's glass page panel (RIPPS2's own look). |
 
 ## Element types RIPPS2 adds
@@ -72,7 +73,13 @@ for first, so a cold page fills from the cover in focus. The page scrolls by who
 selection in view. The glow says which game is selected, so a grid needs no name panel.
 
 Controls on a Grid theme: **Left / Right** one cover, **Up / Down** one row (held arrows repeat), and
-**past the top or bottom row** a new press switches drive. L1/R1 still switch categories.
+**past the top or bottom row** a new press switches drive. L1/R1 still switch categories. Build 80:
+the **cancel button** (Circle, or Cross with Circle to select) cycles the sources on the game list, on Grid
+and Coverflow themes alike, and the hint row says *Source*; inside a folder it climbs out first, and on the
+info page it is still Back.
+
+**Tilt on a Grid (build 80):** `tilt=1` tips only the chosen cover, about its own centre (its glow with
+it); the rest of the page holds still. `tilt_scale` (100 = a page's angle) lets one cover turn further.
 
 A Grid page **must also declare an `ItemsList` with `hidden=1`**: the engine adds a visible default
 list to any page without one.
@@ -82,13 +89,13 @@ list to any page without one.
 | Key | On | Build | What it does |
 |---|---|---|---|
 | `tilt` | any image / panel | 70 | `1`: the element tips with the right stick on the game list and info page. |
-| `tilt_x`, `tilt_y` | | 70 | The pivot. Elements sharing a pivot tip together as one plane. |
+| `tilt_x`, `tilt_y` | | 70 | The pivot. Elements sharing a pivot tip together as one plane: give every piece of an info page (text included, it tilts too) the same pivot and the page moves as one sheet. |
 | `tilt_scale` | | 70 | The angle in percent of the default (1-400, default 100). |
 | `alpha` | `GameImage` | 66 | Opacity 0-128 (128 opaque). |
 | `widecrop` | `Background` | 79 | `1`: on a 16:9 picture the art shows its middle three quarters of height (a zoom, the faux crop) instead of stretching 4:3 art wide. Frosted panels over it follow the same crop. |
 | `slide` | `GameImage` | 59 | Info-page slideshow position 1-4. |
 | `hidden` | `ItemsList` | RiptOPL | The list drives selection but is not drawn (Coverflow, Grid). |
-| `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text line step; centre the text block in its height. |
+| `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text line step; centre the text block in its height. With either set, wrapped text longer than its box **rolls** through it (set one on every description). One-line text always scrolls inside its room. |
 | `item_height` | `ItemsList` | 59 | Row pitch. |
 | `<font>_caps` | global font slot | 70 | `1`: that font draws in capitals. |
 

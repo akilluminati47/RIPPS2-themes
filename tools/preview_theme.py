@@ -129,7 +129,15 @@ class Page:
             img = self.image(e["default"]) if e.get("default") else (sample_cover(0, w, h) if t == "ItemCover" else None)
             if img:
                 x, y = self.rect(e, w, h)
+                if t == "ItemCover" and e.get("reflection") == "1":  # the mirror under the case
+                    ref = img.transpose(Image.FLIP_TOP_BOTTOM).crop((0, 0, img.width, img.height // 3))
+                    self.paste(Image.eval(ref, lambda c: c // 3), x, y + h + 2, w, h // 3)
                 self.paste(img, x, y, w, h)
+                if e.get("overlay"):
+                    for key in ("overlay", "overlay2"):
+                        ov = self.image(e[key]) if e.get(key) else None
+                        if ov:
+                            self.paste(ov, x, y, w, h)
         elif t == "Grid":
             cols, rows, gap = int(e.get("columns", 4)), int(e.get("rows", 2)), int(e.get("spacing", 14))
             w, h = num(e.get("width"), W, 104), num(e.get("height"), H, 146)
@@ -164,7 +172,20 @@ class Page:
             for r in range(max(1, h // 22)):
                 fill = color(self.glob.get("sel_text_color", "#0064FF")) if r == 2 else txt
                 self.d.text((x + 6, y + r * 22), "Game title %d" % (r + 1), font=f, fill=fill)
-        elif t in ("ItemText", "MenuText", "HintText", "InfoHintText", "AttributeText"):
+        elif t in ("HintText", "InfoHintText"):  # the theme's own button glyphs, as the console draws them
+            pairs = [("triangle", "Menu"), ("cross", "Run"), ("square", "Info")] + ([("circle", "Source")] if self.grid else []) if t == "HintText" else [("cross", "Run"), ("circle", "Back")]
+            f = self.font(e.get("font"))
+            x, y = num(e.get("x"), W), num(e.get("y"), H)
+            total = sum(22 + self.d.textlength(w, font=f) + 14 for _, w in pairs) - 14
+            if e.get("aligned", "1") == "1":
+                x -= total / 2
+            for glyph, word in pairs:
+                g = self.image(glyph)
+                if g:
+                    self.paste(g, x, y - 2, 20, 20)
+                self.d.text((x + 22, y), word, font=f, fill=color(self.glob.get("ui_text_color", "#C4DAFF")))
+                x += 22 + self.d.textlength(word, font=f) + 14
+        elif t in ("ItemText", "MenuText", "AttributeText"):
             label = {"ItemText": "Selected game", "MenuText": "ALL GAMES", "HintText": "cross run   triangle options",
                      "InfoHintText": "cross run   circle back"}.get(t, e.get("attribute", "text") + ": sample")
             f = self.font(e.get("font"))
@@ -185,6 +206,7 @@ def render(folder, out):
     sheet = Image.new("RGBA", (W * 2 + 16, H), (0, 0, 0, 255))
     for col, fam in enumerate(("main", "info")):
         page = Page(folder, glob)
+        page.grid = any(e.get("type") in ("Grid", "Coverflow") for (f, _), e in elems.items() if f == "main")
         i = 0
         while (fam, i) in elems:
             page.draw(elems[(fam, i)])

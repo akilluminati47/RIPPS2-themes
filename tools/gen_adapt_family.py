@@ -1,4 +1,4 @@
-"""Write conf_theme.cfg for the four Adapt-family themes (Adapt, Adapt Rx, RIPgrid, RIPgrid Rx) from one
+"""Write conf_theme.cfg for the Adapt-family themes (Adapt, Adapt Rx, RIPgrid) from one
 layout, so the shared pieces -- the frosted screen, the side bar, the info page -- stay in step.
 
     python3 tools/gen_adapt_family.py
@@ -7,13 +7,18 @@ Layers, back to front, on the game list and the info page alike:
   Background (each game's art, widecrop in 16:9) -> a full-screen frosted layer (blur, low tint, no
   frame) -> the side bar (a dark frosted strip and a light rule, frameless) -> the framed glass panel
   under the text -> the art and text.
+
+The whole info page (panel, logo, badges, text, screenshots) tips with the right stick as one plane about
+the page's centre; the hint row and the backdrop hold still. Adapt's cover is RIPPS2's case (case +
+case_overlay, its reflection below), tipping with the disc. On RIPgrid only the chosen cover tips.
 """
 import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
 HEAD = """# Theme Name: {name}
-# Made by: akilluminati47 (Adapt RiptOPL, 8/27/2026), RIPPS2 edition (build 79)
+# Made by: akilluminati47 (Adapt RiptOPL, 8/27/2026), RIPPS2 edition (build 80)
+# [case.png] [case_overlay.png] RiptOPL's built-in case (b2); [SCR43.png] Adapt's screenshot frame at 4:3
 # RIPPS2: each game's art under frosted glass (a full-screen Ripps2PanelGlass, blur=1), a frosted side
 # bar, clear glass panels under the text, page morphs between the list and the info page, the pillars
 # behind Settings (no settings_bg), right-stick tilt on the art. Art eases in; no stock disc or case.
@@ -23,6 +28,7 @@ sel_text_color=#0064FF
 text_color=#FFFFFF
 ui_text_color=#C4DAFF
 towers=0
+source_name=pop
 default_font=a.ttf
 default_font_size=17
 font1=b.ttf
@@ -33,6 +39,14 @@ font4_size=20
 """
 
 FROST_TINT, PANEL_TINT, BAR_TINT, RULE_TINT = 24, 44, 88, 22
+INFO_TILT = dict(tilt=1, tilt_x=320, tilt_y=260, tilt_scale=75)  # the info page: one plane
+
+
+def case(**kv):
+    """RIPPS2's case around the cover, true scale, with its reflection (the built-in theme's own keys)."""
+    return dict(kv, width=143, height=201, aligned=1, scaled=1, reflection=1, overlay="case", overlay2="case_overlay",
+                overlay_ulx=0, overlay_uly=0, overlay_urx=143, overlay_ury=0,
+                overlay_llx=0, overlay_lly=201, overlay_lrx=143, overlay_lry=201)
 
 
 def block(name, **kv):
@@ -57,10 +71,10 @@ def backdrop(fam, rx):
 
 
 def screenshot(name, pattern, x, y):
-    return block(name, type="GameImage", pattern=pattern, scaled=1, x=x, y=y, overlay="SCR_overlay",
-                 overlay_ulx=6, overlay_uly=4, overlay_urx=171, overlay_ury=4,
-                 overlay_llx=6, overlay_lly=115, overlay_lrx=171, overlay_lry=115,
-                 tilt=1, tilt_x=x, tilt_y=290)
+    # 4:3: a 160 x 120 window in a 170 x 128 frame; scaled=1 keeps it 4:3 on a 16:9 picture, as the case is
+    return block(name, type="GameImage", pattern=pattern, scaled=1, x=x, y=y, width=170, height=128, overlay="SCR43",
+                 overlay_ulx=6, overlay_uly=4, overlay_urx=166, overlay_ury=4,
+                 overlay_llx=6, overlay_lly=124, overlay_lrx=166, overlay_lry=124, **INFO_TILT)
 
 
 def info(rx):
@@ -71,31 +85,31 @@ def info(rx):
     sx = 106 if rx else 532   # screenshots' centre
     els = backdrop("info", rx) + [
         block("info4", type="Ripps2PanelGlass", aligned=0, x=gx, y=160, width=395, height=255,
-              blur=1, tint=PANEL_TINT, frame=1, tilt=1, tilt_x=gx + 197, tilt_y=287),
+              blur=1, tint=PANEL_TINT, frame=1, **INFO_TILT),
         block("info5", type="GameImage", pattern="LGO", x="POS_MID", y=100, aligned=1, width=300,
-              height=125, tilt=1, tilt_x=330 if rx else 320, tilt_y=100),
-        block("info6", type="AttributeImage", attribute="Rating", default="rating/0_Rating", aligned=0, x=ax, y=177),
-        block("info7", type="AttributeImage", attribute="Scan", aligned=0, x=ax + 172, y=173),
-        block("info8", type="AttributeImage", attribute="Players", aligned=0, x=ax + 122, y=173),
+              height=125, **INFO_TILT),
+        block("info6", type="AttributeImage", attribute="Rating", default="rating/0_Rating", aligned=0, x=ax, y=177, **INFO_TILT),
+        block("info7", type="AttributeImage", attribute="Scan", aligned=0, x=ax + 172, y=173, **INFO_TILT),
+        block("info8", type="AttributeImage", attribute="Players", aligned=0, x=ax + 122, y=173, **INFO_TILT),
+        # line_height: a description longer than its box rolls through it instead of running on
         block("info9", type="AttributeText", attribute="Description", aligned=0, display=2, x=tx, y=210,
-              width=375, height=100, wrap=1, font=1),
+              width=375, height=100, wrap=1, line_height=19, font=1, **INFO_TILT),
         block("info10", type="AttributeText", attribute="Developer", aligned=0, display=2, x=tx, y=330,
-              width=375, wrap=0, font=2),
+              width=375, wrap=0, font=2, **INFO_TILT),
         block("info11", type="AttributeText", attribute="Release", aligned=0, display=2, x=tx, y=358,
-              width=375, font=3),
+              width=375, font=3, **INFO_TILT),
         block("info12", type="AttributeText", attribute="Genre", display=2, aligned=0, x=tx, y=385,
-              width=375, font=2),
+              width=375, font=2, **INFO_TILT),
         block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=3),
-        screenshot("info14", "SCR", sx, 225),
-        screenshot("info15", "SCR2", sx, 356),
-        block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=ax + 303, y=330),
-        block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=173),
-        block("info18", type="AttributeImage", attribute="Aspect", aligned=0, x=ax + 222, y=173),
+        screenshot("info14", "SCR", sx, 226),
+        screenshot("info15", "SCR2", sx, 358),
+        block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=ax + 303, y=330, **INFO_TILT),
+        block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=173, **INFO_TILT),
+        block("info18", type="AttributeImage", attribute="Aspect", aligned=0, x=ax + 222, y=173, **INFO_TILT),
     ]
     # apps: the app's cover where the logo was, no screenshots
     apps = [
-        block("appsInfo5", type="ItemCover", width=135, height=190, x=sx, y=270, aligned=1, scaled=1,
-              reflection=1, tilt=1, tilt_x=sx, tilt_y=270),
+        block("appsInfo5", type="ItemCover", **case(x=sx, y=262, **INFO_TILT)),
         block("appsInfo14", type="GameImage", enabled=0),
         block("appsInfo15", type="GameImage", enabled=0),
     ]
@@ -116,8 +130,7 @@ def adapt(rx):
     main = backdrop("main", rx) + [
         block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=76, width=432, height=309,
               blur=1, tint=PANEL_TINT, frame=1),
-        block("main5", type="ItemCover", width=135, height=190, x=cx, y=277, aligned=1, scaled=1,
-              reflection=1, tilt=1, tilt_x=cx, tilt_y=200),
+        block("main5", type="ItemCover", **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
         block("main6", type="ItemIcon", aligned=1, scaled=1, x=cx, y=96, width=120, height=120,
               tilt=1, tilt_x=cx, tilt_y=200),
         block("main7", type="ItemsList", x=gx + 12, y=88, aligned=0, width=420, height=285, font=4),
@@ -135,10 +148,11 @@ def adapt(rx):
 
 
 def ripgrid(rx):
-    # 4 x 2 covers centred in the room the side bar leaves; the highlight says which game it is
+    # 4 x 2 covers centred in the room the side bar leaves; the highlight says which game it is, and only
+    # it tips with the right stick (about its own centre; tilt_scale lets it turn further than a page)
     main = backdrop("main", rx) + [
-        block("main4", type="Grid", pattern="COV", x=300 if rx else 340, y=62, width=120, height=168,
-              columns=4, rows=2, spacing=16, font=4, tilt=1, tilt_x=300 if rx else 340, tilt_y=238),
+        block("main4", type="Grid", pattern="COV", x=340, y=62, width=120, height=168,
+              columns=4, rows=2, spacing=16, font=4, tilt=1, tilt_scale=160),
         block("main5", type="ItemsList", x="POS_MID", y=45, width="DIM_INF", height=24, aligned=1,
               font=4, hidden=1),
     ] + common_tail("main", 6)
@@ -153,8 +167,9 @@ def write(folder, name, main, mainApps, infoEls, infoApps):
 
 
 if __name__ == "__main__":
+    # RIPgrid has one side: the grid fills the page, so there is nothing to mirror
     for folder, name, make, rx in (("thm_Adapt", "Adapt", adapt, 0), ("thm_Adapt Rx", "Adapt Rx", adapt, 1),
-                                   ("thm_RIPgrid", "RIPgrid", ripgrid, 0), ("thm_RIPgrid Rx", "RIPgrid Rx", ripgrid, 1)):
+                                   ("thm_RIPgrid", "RIPgrid", ripgrid, 0)):
         m, ma = make(rx)
         i, ia = info(rx)
         write(folder, name, m, ma, i, ia)
