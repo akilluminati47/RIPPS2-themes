@@ -155,7 +155,7 @@ without one.
 | `slide` | `GameImage` | 59 | Slideshow position 1-4: the page's slides take turns (5 s each, a 1 s crossfade), each in its own place with its own overlay and reflection. Any page: the info page's art (BG, SCR, SCR2), or a game list's case showing the front cover (`COV`) then the back (`COV2`), as Adapt does (build 81). A game without a slide's art skips it. |
 | `hidden` | `ItemsList` | RiptOPL | The list drives selection but is not drawn (Coverflow, Grid). |
 | `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text's line step; centre the block in its height. With either set, text longer than its box **rolls** through it. One-line text always scrolls in its room. |
-| `item_height` | `ItemsList` | 59 | Row pitch. |
+| `item_height` | `ItemsList` | 59 | Row pitch. The highlighted row's bar fills the row, and from build 83 every title is centred on its row by its own font's centreline (measured from the face), so any font sits in the middle of the bar with nothing to adjust. |
 | `devices` | any element | RiptOPL | Show the element only on some devices (see the engine reference). |
 
 ## Effects and tricks
