@@ -4,9 +4,11 @@
 
 Draws main and info side by side in RIPPS2's 640x480 space the way the engine places things:
 negative x / y count from the right / bottom, POS_MID is the centre, aligned=1 centres the element on
-its x / y. Backgrounds and static images, Ripps2PanelGlass (frosted when blur=1, as build 78 makes it),
-covers, disc icons, the Grid's page of covers with the selection framed, list rows and text lines in the
-theme's own fonts. Game art is stood in by the theme's default= images. It is a layout check, not a
+its x / y. Backgrounds and static images, Ripps2PanelGlass (frosted when blur=1, with its tint=,
+tint_color= and frame= as build 79 draws them, else build 78's gradient), covers, disc icons, the Grid's
+page of covers (one with no art, shown as build 79's glass tile with the name) with the selection's glow,
+list rows and text lines in the theme's own fonts. Game art is stood in by generated pictures (a theme's
+default= images where it names them). It is a layout check, not a
 screenshot: the towers, tilt and fades only show on the console (or in PCSX2).
 """
 import os
@@ -43,6 +45,17 @@ def sample_art():
         d.line([(0, y), (W, y)], fill=(40 + y // 4, 70 + y // 6, 160 - y // 5, 255))
     for i, (cx, cy, r, c) in enumerate(((160, 140, 110, (255, 170, 60)), (470, 300, 150, (60, 220, 160)), (330, 90, 70, (240, 80, 120)))):
         d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=c + (255,))
+    return im
+
+
+def sample_cover(k, w, h):
+    """A stand-in for a game's cover: a colour block with a band, different per game."""
+    hues = ((200, 60, 60), (60, 120, 210), (230, 170, 40), (80, 170, 90), (150, 70, 190), (40, 170, 190), (220, 110, 50), (110, 110, 130))
+    c = hues[k % len(hues)]
+    im = Image.new("RGBA", (w, h), c + (255,))
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, h * 2 // 3, w, h * 2 // 3 + h // 8], fill=(255, 255, 255, 200))
+    d.rectangle([0, 0, w - 1, h - 1], outline=(0, 0, 0, 160))
     return im
 
 
@@ -102,14 +115,18 @@ class Page:
                 self.im.alpha_composite(frost.crop((x, y, x + w, y + h)), (x, y))
             tint = Image.new("RGBA", (w, h))
             td = ImageDraw.Draw(tint)
-            for yy in range(h):  # RIPPS2's glass: light at the top, deep from about a third down
-                a = 0x3C if yy < h * 0.22 else int(0x3C + (0xB8 - 0x3C) * min(1, (yy - h * 0.22) / (h * 0.16)))
-                td.line([(0, yy), (w, yy)], fill=(4, 12, 46, a))
+            if "tint" in e:  # build 79: one constant tint (0-128, the PS2's alpha scale)
+                td.rectangle([0, 0, w, h], fill=color(e.get("tint_color", "#040C2E"), min(255, int(e["tint"]) * 2)))
+            else:
+                for yy in range(h):  # RIPPS2's glass: light at the top, deep from about a third down
+                    a = 0x3C if yy < h * 0.22 else int(0x3C + (0xB8 - 0x3C) * min(1, (yy - h * 0.22) / (h * 0.16)))
+                    td.line([(0, yy), (w, yy)], fill=(4, 12, 46, a))
             self.im.alpha_composite(tint, (x, y))
-            self.d.rectangle([x, y, x + w - 1, y + h - 1], outline=(126, 194, 255, 150))
+            if e.get("frame", "1") != "0":
+                self.d.rectangle([x, y, x + w - 1, y + h - 1], outline=(126, 194, 255, 150))
         elif t in ("ItemCover", "ItemIcon"):
             w, h = num(e.get("width"), W, 140), num(e.get("height"), H, 200)
-            img = self.image(e.get("default", "cover" if t == "ItemCover" else "ico"))
+            img = self.image(e["default"]) if e.get("default") else (sample_cover(0, w, h) if t == "ItemCover" else None)
             if img:
                 x, y = self.rect(e, w, h)
                 self.paste(img, x, y, w, h)
@@ -117,18 +134,29 @@ class Page:
             cols, rows, gap = int(e.get("columns", 4)), int(e.get("rows", 2)), int(e.get("spacing", 14))
             w, h = num(e.get("width"), W, 104), num(e.get("height"), H, 146)
             cx, top = num(e.get("x"), W, W // 2), num(e.get("y"), H, 60)
-            img = self.image(e.get("default", "cover"))
+            img = self.image(e["default"]) if e.get("default") else None
             left = cx - (cols * (w + gap) - gap) // 2
+            sel = color(self.glob.get("sel_text_color", "#0064FF"))
+            f = self.font(e.get("font"))
             for k in range(cols * rows):
                 x, y = left + (k % cols) * (w + gap), top + (k // cols) * (h + gap)
-                if k == 0:
-                    sw, sh = w * 112 // 100, h * 112 // 100
-                    sx, sy = x + w // 2 - sw // 2, y + h // 2 - sh // 2
-                    self.d.rectangle([sx - 3, sy - 3, sx + sw + 2, sy + sh + 2], outline=color(self.glob.get("sel_text_color", "#0064FF")), width=2)
-                    if img:
-                        self.paste(img, sx, sy, sw, sh)
-                elif img:
-                    self.paste(img, x, y, w, h, dim=0.85)
+                cw, ch, dim = w, h, 0.85
+                if k == 0:  # the selection: 112%, a soft glow and a frame
+                    cw, ch, dim = w * 112 // 100, h * 112 // 100, 1.0
+                    x, y = x + w // 2 - cw // 2, y + h // 2 - ch // 2
+                    glow = Image.new("RGBA", (cw + 40, ch + 40))
+                    ImageDraw.Draw(glow).rectangle([14, 14, cw + 25, ch + 25], outline=sel[:3] + (150,), width=6)
+                    self.im.alpha_composite(glow.filter(ImageFilter.GaussianBlur(5)), (x - 20, y - 20))
+                    self.d.rectangle([x - 2, y - 2, x + cw + 1, y + ch + 1], outline=sel[:3] + (200,), width=2)
+                if k == 5 and not img:  # a game with no art: a glass tile with its name
+                    tile = Image.new("RGBA", (cw, ch), (4, 12, 46, 64))
+                    self.im.alpha_composite(tile, (x, y))
+                    self.d.rectangle([x, y, x + cw - 1, y + ch - 1], outline=(126, 194, 255, 150))
+                    for n, word in enumerate(("Game", "without art")):
+                        tw = self.d.textlength(word, font=f)
+                        self.d.text((x + (cw - tw) / 2, y + ch / 2 - 22 + n * 22), word, font=f, fill=txt)
+                else:
+                    self.paste(img or sample_cover(k, cw, ch), x, y, cw, ch, dim=dim)
         elif t == "ItemsList":
             w, h = num(e.get("width"), W, 373), num(e.get("height"), H, 316)
             x, y = num(e.get("x"), W), num(e.get("y"), H)

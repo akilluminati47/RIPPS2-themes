@@ -2,13 +2,14 @@
 
     python3 tools/check_theme.py "themes/thm_Adapt"
 
-Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 78):
+Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 79):
 - main and info are numbered 0, 1, 2... with no gap (the engine stops reading at the first missing
   number); every other family (appsMain, vcdInfo...) replaces its base family's element of the same
   number, so a number past the base family's last is never read;
 - every element type is one the engine knows;
 - every image the theme names (default=, overlay=, bg/attribute folders) and every font exists;
-- RIPPS2 keys are where they work (blur on Ripps2PanelGlass, columns/rows/spacing on Grid);
+- RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing on
+  Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
 - a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one.
 Exit code 1 on an error; warnings do not fail.
 """
@@ -25,6 +26,7 @@ FAMILIES = ["main", "info", "appsMain", "appsInfo", "favsMain", "favsInfo", "vcd
 # the same number in its base family, and only numbers the base family has are read
 BASE = {f: ("info" if f.endswith("Info") else "main") for f in FAMILIES if f not in ("main", "info")}
 GRID_KEYS = {"columns", "rows", "spacing"}
+GLASS_KEYS = {"blur", "tint", "tint_color", "frame"}  # build 78-79
 
 
 def parse(path):
@@ -90,8 +92,16 @@ def main(folder):
             for key in ("default", "overlay"):
                 if key in e and not img(e[key]):
                     errors.append("%s: %s=%s is missing" % (where, key, e[key]))
-            if "blur" in e and t != "Ripps2PanelGlass":
-                warnings.append("%s: blur works only on Ripps2PanelGlass" % where)
+            if GLASS_KEYS & set(e) and t != "Ripps2PanelGlass":
+                warnings.append("%s: blur/tint/tint_color/frame work only on Ripps2PanelGlass" % where)
+            if "widecrop" in e and t != "Background":
+                warnings.append("%s: widecrop works only on Background" % where)
+            if "tint" in e and not (e["tint"].isdigit() and 0 <= int(e["tint"]) <= 128):
+                errors.append("%s: tint is 0-128 (got %s)" % (where, e["tint"]))
+            if "tint_color" in e and not re.match(r"^#[0-9A-Fa-f]{6}$", e["tint_color"]):
+                errors.append("%s: tint_color is #RRGGBB (got %s)" % (where, e["tint_color"]))
+            if t == "Grid" and "default" in e:
+                warnings.append("%s: a Grid default= puts that picture on every game without art (build 79 shows a glass tile with the name)" % where)
             if GRID_KEYS & set(e) and t != "Grid":
                 warnings.append("%s: columns/rows/spacing work only on Grid" % where)
             if t == "Grid":

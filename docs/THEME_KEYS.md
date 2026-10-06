@@ -20,19 +20,33 @@ makes `x`,`y` its top-left corner. `scaled=1` narrows width for 16:9 (widescreen
 
 ## Element types RIPPS2 adds
 
-### `Ripps2PanelGlass` (build 55; blur in 78)
-A glass panel: a navy tint, light at the top and deepening from about a third down, with a thin
-frame. Put it after the backdrop and before the text it sits under.
+### `Ripps2PanelGlass` (build 55; blur in 78; tint, tint_color, frame in 79)
+A glass panel: by default a navy tint, light at the top and deepening from about a third down, with a
+thin frame. Put it after the backdrop and before the text it sits under. With `tint=` it is clear glass
+instead: one even tint over the whole panel.
 
 | Key | Values | Build | What it does |
 |---|---|---|---|
 | `x`,`y`,`width`,`height`,`aligned` | | 55 | The panel's rectangle. |
 | `blur` | `0` / `1` | 78 | Frosted glass: what is behind the panel shows through softened. The source is the page's `Background` element -- the selected game's own background art once loaded, else the theme's `default=` -- shrunk to 80x60 and drawn stretched with bilinear filtering, made again only when the game or its art changes. Cheap enough for every page. |
+| `tint` | 0-128 | 79 | One constant tint instead of the gradient (128 opaque; 20-50 reads as glass). With `blur=1` the art stays a soft, even presence behind the text. |
+| `tint_color` | `#RRGGBB` (default `#040C2E`) | 79 | The tint's colour. A dark `tint_color` with a high `tint` makes a contrasting strip (Adapt's side bar); a light one at a low `tint` a highlight rule. |
+| `frame` | `0` / `1` (default 1) | 79 | The thin frame line. `0` for layers that are not panels: a full-screen frosted layer, a side bar. |
 | `tilt`, `tilt_x`, `tilt_y`, `tilt_scale` | | 70 | Right-stick tilt (below). |
 
+The frost eases in with the art under it, and where a game has no background art the panel is just its
+tint over `bg_color` / the pillars.
+
+**The frosted screen (build 79).** A full-screen panel straight after the `Background` --
+`x=0 y=0 width=640 height=480 aligned=0 blur=1 tint=24 frame=0` -- puts every game's art under frosted
+glass: no hard edges, no stretched pixels, and the panels and covers over it stay readable. Panels after it
+frost the same art, so they read as one sheet of glass. Adapt and RIPgrid do this on both pages.
+
 **Page transitions.** RIPPS2 morphs one page's glass panel into the next when you move between the
-game list and the info page (and into menus). It uses the **first** `Ripps2PanelGlass` of `main` and
-of `info`: declare one on each page and the theme gets the full transition treatment. A theme with
+game list and the info page (and into menus). It uses the **first framed** `Ripps2PanelGlass` of `main` and
+of `info` (build 79: frameless layers such as the frosted screen or a side bar are skipped; a page with
+only frameless ones uses its first): declare one on each page and the theme gets the full transition
+treatment. A theme with
 none keeps its backdrop in place and switches the content (RIPFLOW's way).
 
 ### `Grid` (build 78)
@@ -46,18 +60,22 @@ The game list as a page of covers in rows. Backed by the cover art (`COV`) like 
 | `columns` | 4 (1-8) | Covers across. |
 | `rows` | 2 (1-4) | Rows on screen. |
 | `spacing` | 14 | Pixels between covers. |
-| `default`, `overlay`, `overlay_*`, `reflection` | | As on `ItemCover` (placeholder, case art, mirror under the selection). |
+| `default` | none | A placeholder for games without art. Leave it out (build 79): those games get a clear glass tile with their name instead, so no stock disc or case fills the grid. |
+| `overlay`, `overlay_*`, `reflection` | | As on `ItemCover` (case art, mirror under the selection). |
+| `font` | | The font of the name on a no-art tile. |
 | `tilt*` | | Right-stick tilt. |
 
-The selection is drawn 12% larger, framed in `sel_text_color`, and last; the others a step dimmer.
-Its art is asked for first, so a cold page fills from the cover in focus. The page scrolls by whole
-rows to keep the selection in view.
+Each cover eases in as its art arrives (build 79), remembered per game, so scrolling back does not fade
+again. The selection is drawn 12% larger and last with a **breathing glow** in `sel_text_color` (soft
+rings swelling and easing over 2.4 s, under a crisp frame); the others a step dimmer. Its art is asked
+for first, so a cold page fills from the cover in focus. The page scrolls by whole rows to keep the
+selection in view. The glow says which game is selected, so a grid needs no name panel.
 
 Controls on a Grid theme: **Left / Right** one cover, **Up / Down** one row (held arrows repeat), and
 **past the top or bottom row** a new press switches drive. L1/R1 still switch categories.
 
 A Grid page **must also declare an `ItemsList` with `hidden=1`**: the engine adds a visible default
-list to any page without one. Pair the grid with an `ItemText` for the selected game's name.
+list to any page without one.
 
 ## Keys RIPPS2 adds to existing elements
 
@@ -67,6 +85,7 @@ list to any page without one. Pair the grid with an `ItemText` for the selected 
 | `tilt_x`, `tilt_y` | | 70 | The pivot. Elements sharing a pivot tip together as one plane. |
 | `tilt_scale` | | 70 | The angle in percent of the default (1-400, default 100). |
 | `alpha` | `GameImage` | 66 | Opacity 0-128 (128 opaque). |
+| `widecrop` | `Background` | 79 | `1`: on a 16:9 picture the art shows its middle three quarters of height (a zoom, the faux crop) instead of stretching 4:3 art wide. Frosted panels over it follow the same crop. |
 | `slide` | `GameImage` | 59 | Info-page slideshow position 1-4. |
 | `hidden` | `ItemsList` | RiptOPL | The list drives selection but is not drawn (Coverflow, Grid). |
 | `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text line step; centre the text block in its height. |
@@ -75,6 +94,9 @@ list to any page without one. Pair the grid with an `ItemText` for the selected 
 
 ## RIPPS2 behaviour every theme gets
 - Art fades in as it arrives; the info page's art appears as one group (up to 0.8 s wait).
+- Switching themes from the game list (build 79): **hold SELECT 4.2 seconds** and RIPPS2 steps to the
+  next theme in Settings > Interface > Theme, once per hold, and saves it; a press under 4.2 s refreshes
+  the list as before. Handy for trying a theme you are working on against the others.
 - The category bar, button hints and source name follow Colors and More (fade when idle, hidden...).
 - Sounds: a theme's `sound/` folder (`boot.adp`, `cursor.adp`, `confirm.adp`, `cancel.adp`,
   `message.adp`, `transition.adp`) replaces RIPPS2's for that theme.
