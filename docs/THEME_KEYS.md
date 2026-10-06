@@ -99,7 +99,7 @@ out falls back to its `default_font`.
 | `font9` | a title in true case (RetroAchievements) |
 | `font10` | About's small print |
 | `font11` | the CD player's track title |
-| `font14` | L3's **view word** (ALL / PS1 / PS2). A theme without `font14` gets RIPPS2 Sleek Bold at 64 px here (build 81; `font14_size` still sets it), not its default font. The Pop In source toast always draws in that RIPPS2 face, on every theme, so it moves the same everywhere |
+| `font14` | the Achievements page's big numbers. A theme without `font14` gets RIPPS2 Sleek Bold at 64 px here (build 81; `font14_size` still sets it), not its default font. (Up to build 80 it also drew L3's view word; from build 81 L3's ALL / PS1 / PS2 and the Pop In toast draw in RIPPS2 Sleek Bold 64 on every theme, so they move the same everywhere.) |
 | `font15` | typed text and tooltips, in true lowercase |
 
 ## Element types RIPPS2 adds
@@ -228,7 +228,7 @@ is loaded into the SPU2's 2 MB at once (music streams), so keep the set small.
 - Art fades in as it arrives; covers on a Grid ease in once per game.
 - Hold **SELECT 4.2 seconds** on the game list to step to the next theme (build 79), once per hold, and
   it is saved; a shorter press refreshes the list.
-- L3's view word, the Pop In toast and the category bar's flying mark, in the theme's fonts.
+- L3's view word and the Pop In toast in RIPPS2 Sleek Bold 64 (build 81), the same on every theme, and the category bar's flying mark.
 - Colors and More, with the theme's own defaults where it gives them.
 - 720p and 1080i in one pass at full detail (build 75).
 
