@@ -128,18 +128,25 @@ def common_tail(fam, start):
     ]
 
 
+# RIPPS2's category bar: LAUNCH DISC, STORAGE, MEMORY FILES at these x (ripps2ui.c categoryX), labels at y 30
+BAR_X = (128, 320, 512)
+
+
 def adapt(rx):
-    # Rx: the list left and the case right, the side bar staying left; even 16 px gaps from the bar to
-    # the glass (56-464), the glass to the case (480-623) and the case to the edge
-    gw = 408 if rx else 432   # list glass width
-    gx = 56 if rx else 188    # list glass left
-    cx = 552 if rx else 110   # cover and disc centre
-    lw = gw - 24 if rx else 420  # the list inside the glass
+    # The disc and its case sit right under LAUNCH DISC: Adapt's at the bar's left end (x 128); Rx puts
+    # LAUNCH DISC at the right end (category_order=memory_files_first, build 81) and its disc under it
+    # (x 512). The list glass takes the rest, 16 px from the bar's rule (x 40), from the case and from the
+    # edge: Adapt 216-624, Rx 56-424.
+    cx = BAR_X[2] if rx else BAR_X[0]  # cover and disc centre, under LAUNCH DISC
+    gx = 56 if rx else 216    # list glass left
+    gw = 368 if rx else 408   # list glass width
+    lw = gw - 24              # the list inside the glass
     main = backdrop("main") + [
         block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=76, width=gw, height=309,
               blur=1, tint=PANEL_TINT, frame=1),
         block("main5", type="ItemCover", **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
-        block("main6", type="ItemIcon", aligned=1, scaled=1, x=cx, y=96, width=120, height=120,
+        # the disc: clear of the LAUNCH DISC label above (y 30) and of the case below (its top at 161)
+        block("main6", type="ItemIcon", aligned=1, scaled=1, x=cx, y=100, width=112, height=112,
               tilt=1, tilt_x=cx, tilt_y=200),
         block("main7", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
     ] + common_tail("main", 8)
@@ -167,8 +174,8 @@ def ripgrid(rx):
     return main, []
 
 
-def write(folder, name, main, mainApps, infoEls, infoApps):
-    text = HEAD.format(name=name) + "\n" + "\n".join(main + infoEls + mainApps + infoApps) + "\n"
+def write(folder, name, main, mainApps, infoEls, infoApps, extra=""):
+    text = HEAD.format(name=name) + extra + "\n" + "\n".join(main + infoEls + mainApps + infoApps) + "\n"
     with open(os.path.join(ROOT, folder, "conf_theme.cfg"), "w", newline="\n") as f:
         f.write(text)
     print("wrote", folder)
@@ -180,4 +187,6 @@ if __name__ == "__main__":
                                    ("thm_RIPgrid", "RIPgrid", ripgrid, 0)):
         m, ma = make(rx)
         i, ia = info(rx)
-        write(folder, name, m, ma, i, ia)
+        # Rx: LAUNCH DISC at the bar's right end, over its disc (a default: the user's own order wins)
+        extra = "category_order=memory_files_first\n" if rx else ""
+        write(folder, name, m, ma, i, ia, extra)
