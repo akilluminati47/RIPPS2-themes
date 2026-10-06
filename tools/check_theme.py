@@ -2,7 +2,7 @@
 
     python3 tools/check_theme.py "themes/thm_Adapt"
 
-Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 80):
+Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 81):
 - main and info are numbered 0, 1, 2... with no gap (the engine stops reading at the first missing
   number); every other family (appsMain, vcdInfo...) replaces its base family's element of the same
   number, so a number past the base family's last is never read;
@@ -11,6 +11,7 @@ Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPP
 - RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing on
   Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
 - a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one;
+- source_name, color_theme, category_bar, button_hints, dpad_glyphs and category_order hold values RIPPS2 knows;
 - every PNG is an 8-bit palette PNG (a warning: RGBA ones cost four times the VRAM; tools/png8.py).
 Exit code 1 on an error; warnings do not fail.
 """
@@ -66,8 +67,14 @@ def main(folder):
     for k, v in glob.items():
         if (k == "default_font" or re.match(r"font\d+$", k)) and not os.path.isfile(os.path.join(folder, v)):
             errors.append("font %s=%s is missing" % (k, v))
-    if "source_name" in glob and glob["source_name"] != "pop":
-        errors.append("source_name=%s: the one value is pop (build 80)" % glob["source_name"])
+    # Colors and More from the theme (build 81; source_name=pop since 80): each must be a value RIPPS2 knows
+    CHOICES = {"source_name": ("pop", "shown", "fade", "hidden"), "category_bar": ("shown", "fade", "hidden"),
+               "button_hints": ("shown", "fade", "hidden"), "dpad_glyphs": ("hidden", "shown", "fade_in", "fade_out"),
+               "category_order": ("launch_disc_first", "memory_files_first"),
+               "color_theme": ("ripps2", "ember", "blood", "ectoplasm", "amethyst", "bone")}
+    for key, values in CHOICES.items():
+        if key in glob and glob[key].lower() not in values:
+            errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))
     if glob.get("use_settings_bg") == "1" and not img("settings_bg"):
         errors.append("use_settings_bg=1 but settings_bg.png is missing")
 
