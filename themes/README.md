@@ -5,6 +5,6 @@
 - `case.png`, `case_overlay.png`: RiptOPL's built-in case art (b2), as RIPPS2 draws its own case.
 - `SCR43.png`: Adapt's screenshot frame, re-cut to a 4:3 window.
 - RIPgrid's type: RIPPS2 Sleek (Regular, Bold, Bold Case), built into RIPPS2 and named as `builtin:` fonts.
-- RIPgrid's `circle.png`, `cross.png`, `square.png`, `triangle.png` and `select.png`: from the Grunge
-  theme; its `start.png` drawn to match.
+- RIPgrid's `circle.png`, `cross.png`, `square.png`, `triangle.png`, `select.png` and `start.png`: from
+  the Grunge theme.
 - Adapt and Adapt Rx: fonts and the remaining images as shipped in Adapt RiptOPL.

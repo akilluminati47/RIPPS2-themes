@@ -219,6 +219,5 @@ if __name__ == "__main__":
         extra = "category_order=memory_files_first\n" if rx else ""
         if make is ripgrid:
             extra += ("# RIPgrid's type: RIPPS2 Sleek (Regular, Bold, Bold Case), built into RIPPS2 (builtin: fonts)\n"
-                      "# [circle.png] [cross.png] [square.png] [triangle.png] [select.png] from the Grunge theme;\n"
-                      "# [start.png] drawn to match\n")
+                      "# [circle.png] [cross.png] [square.png] [triangle.png] [select.png] [start.png] from the Grunge theme\n")
         write(folder, name, m, ma, i, ia, extra, RIPGRID_FONTS if make is ripgrid else ADAPT_FONTS)
