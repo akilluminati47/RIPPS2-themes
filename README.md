@@ -1,4 +1,8 @@
+<p align="center"><img src="media/ripps2-deadelf-256.png" width="160" alt="RIPPS2"></p>
+
 # RIPPS2 themes
+
+> **[Download the build 80 themes](https://github.com/akilluminati47/RIPPS2-themes/releases/latest)** (Adapt, Adapt Rx, RIPgrid) | needs [RIPPS2 build 80](https://github.com/akilluminati47/RIPPS2/releases) or later
 
 Themes for [RIPPS2](https://github.com/akilluminati47/RIPPS2), the PS2 front end, and the kit for
 making more: key reference, a checker, a layout previewer and a left/right mirror tool. Built so that
@@ -14,6 +18,14 @@ people and coding agents alike can add a theme and know it will load before it r
 Install: copy a `thm_...` folder into a `THM` folder on your drive (USB, HDD, MMCE, memory card), as
 for any OPL theme, then pick it in RIPPS2's Settings > Interface > Theme -- or hold SELECT on the game
 list for 4.2 seconds to step through the themes.
+
+<p align="center"><img src="previews/thm_Adapt.png" width="49%" alt="Adapt: game list and info page"> <img src="previews/thm_RIPgrid.png" width="49%" alt="RIPgrid: game list and info page"></p>
+<p align="center"><sub>Layout previews from <code>tools/preview_theme.py</code>: coloured blocks stand in for game art; motion, tilt and fades show on the console.</sub></p>
+
+### On the console
+- **Hold SELECT for 4.2 seconds** on the game list to step to the next theme (a quick press still refreshes the list).
+- **Right stick** tips the art: the whole info page as one plane, Adapt's case and disc, RIPgrid's chosen cover.
+- **RIPgrid**: the D-pad moves through the grid; **Circle** cycles the sources (USB, HDD, ALL GAMES...).
 
 ## The kit
 
