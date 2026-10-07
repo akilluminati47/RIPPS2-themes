@@ -1,4 +1,4 @@
-# What a RIPPS2 theme can do (build 81)
+# What a RIPPS2 theme can do (build 90)
 
 A RIPPS2 theme is a folder, `THM/thm_<Name>/`, on any drive RIPPS2 reads (USB, HDD, MMCE, a memory
 card's `OPL/THM`). Everything on this page is driven from that folder: `conf_theme.cfg`, its images,
@@ -10,7 +10,8 @@ how RIPPS2's own pages meet a theme. The build each key arrived in is given; an 
 key it does not know, so a theme stays usable on it.
 
 **Contents:** [the folder](#the-folder) · [coordinates](#coordinates) · [global keys](#global-keys) ·
-[Colors and More from the theme](#colors-and-more-from-the-theme-build-81) · [fonts](#fonts) ·
+[Colors and More from the theme](#colors-and-more-from-the-theme-build-81) ·
+[hints and glyphs](#hints-and-glyphs-build-90) · [fonts](#fonts) ·
 [element types](#element-types-ripps2-adds) · [keys on existing elements](#keys-ripps2-adds-to-existing-elements) ·
 [effects and tricks](#effects-and-tricks) · [replacing RIPPS2's own images](#replacing-ripps2s-own-images) ·
 [sounds and music](#sounds-and-music) · [what every theme gets](#what-every-theme-gets) ·
@@ -68,6 +69,31 @@ made:
 `ripps2_userset`). A theme's value shows only on a row the user has never touched that still holds its
 own default; anything the user picks, the default included, stays theirs on every theme. Colors and More
 shows what is in effect, so the user sees the theme's choice and can change it.
+
+## Hints and glyphs (build 90)
+
+The hint bar and the button glyphs. Each key is the theme's default for a row of Controller Settings >
+Hints and Glyphs, where every row starts on **Theme** (this key) and anything else the user picks wins.
+
+| Key | Values | What it does |
+|---|---|---|
+| `hints_hide` | hint names, comma separated | Leaves those hints off the bar. The buttons still work. |
+| `hints_order` | hint names, comma separated | The hints named come first, in that order; the rest follow in the order the page adds them. |
+| `hints_labels` | `1` (default), `0`, `badge` | `0`: glyphs only, for glyph art that carries its own words (a hint whose glyph the theme lacks keeps its label). `badge`: each hint is one badge, its glyph and title together on a pill (`hint_badge.png`, or the glyph set's own), the pill's ends kept round and its middle stretched to the title. Never on unless a theme sets it or the user picks Badges. |
+| `hints_layout` | `row` (default), `column` | `column`: one hint a line, from the hint element's `x`/`y` down. A column that would run off the bottom ends on the bar's line instead, so the default hint element gives a column in the bottom left corner. |
+| `hints_spacing` | 12 to 96 (default 28) | A column's line pitch. |
+| `glyph_set` | `theme` (default), `ripps2`, `standard`, `white` | The glyphs on every page. `theme` is the theme's own PNGs (below); `ripps2` is RIPPS2's outlined set; `standard` is the Adapt theme's dark glossy buttons; `white` is the Grunge theme's solid white. The built-in sets cover every glyph, the shoulder buttons, sticks and D-pad included. |
+
+Hint names: `menu` `run` `info` `options` `refresh` `star` `view` `source` (`source` is Coverflow and
+Grid's source cycling). Their buttons name them too: `start` `select` `r3` `l3` `cross` `circle` `square`
+`triangle`. For example, a sidebar theme:
+
+```
+hints_layout=column
+hints_spacing=30
+hints_order=run,info,options
+hints_hide=refresh
+```
 
 ## Fonts
 
@@ -193,7 +219,7 @@ kept). Leave one out and RIPPS2 uses its own, unless `use_default=0`.
 
 | Group | Names |
 |---|---|
-| Button glyphs | `cross` `circle` `square` `triangle` `select` `start` `L1` `R1` `L3` `R3` `L2R2` `left` `right` `ripps2_up` `ripps2_down` |
+| Button glyphs | `cross` `circle` `square` `triangle` `select` `start` `L1` `R1` `L3` `R3` `L2R2` `left` `right` `ripps2_up` `ripps2_down` `hint_badge` (build 90: the pill for `hints_labels=badge`; make it 40 x 28 or so with a flat middle) |
 | Loading | `load0` ... `load7` |
 | Devices | `usb` `usb_bd` `ilk_bd` `m4s_bd` `hdd_bd` `hdd` `mmce` `eth` `udp_bd` `udp_fs` `app` `Index_0` ... `Index_4` `no_Device` `Device_1` ... `Device_6` `Device_all` |
 | Badges | `ELF` `HDL` `ISO` `VCD` `ZSO` `UL` `APP` `CD` `DVD` `PS1` `PS2` `Aspect_s` `Aspect_w` `Aspect_w1` `Aspect_w2` `Rating_0` ... `Rating_5` `no_Rating` `Scan_240p` `Scan_240p1` `Scan_480i` `Scan_480p` ... `Scan_480p5` `Scan_576i` `Scan_576p` `Scan_720p` `Scan_1080i` `Scan_1080i2` `Scan_1080p` `Vmode_multi` `Vmode_ntsc` `Vmode_pal` |
@@ -232,6 +258,7 @@ is loaded into the SPU2's 2 MB at once (music streams), so keep the set small.
   it is saved; a shorter press refreshes the list.
 - L3's view word and the Pop In toast in RIPPS2 Sleek Bold 64 (build 81), the same on every theme, and the category bar's flying mark.
 - Colors and More, with the theme's own defaults where it gives them.
+- Hints and Glyphs (build 90): the user can hide, reorder or relabel the hints and pick a glyph set on any theme.
 - 720p and 1080i in one pass at full detail (build 75).
 
 ## What a theme cannot change (yet)
