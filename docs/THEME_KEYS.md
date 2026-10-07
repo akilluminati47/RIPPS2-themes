@@ -95,6 +95,31 @@ hints_order=run,info,options
 hints_hide=refresh
 ```
 
+## The category bar (build 92)
+
+LAUNCH DISC, STORAGE and MEMORY FILES are drawn in RIPPS2's own face on every theme, so they look alike
+everywhere. A theme can change that, move them, and reword them:
+
+| Key | Values | What it does |
+|---|---|---|
+| `category_font` | `ripps2` (default), `theme` | `theme`: the bar uses the theme's font2 (the current category) and font7 (the others). |
+| `category_layout` | `row` (default), `column` | `column`: the three stacked down the side, left aligned, the mark riding beside the current one (a sidebar). |
+| `category_x`, `category_y` | 0 to 640, 0 to 480 | A column's left edge and first line (40, 140). In a row, `category_y` moves the bar down (30). |
+| `category_spacing` | 12 to 120 | A column's line pitch (34). |
+| `category_label_launch`, `category_label_storage`, `category_label_files` | text | The words on the bar (RIPPS2's if not set). |
+| `category_transition` | `none`, `fade`, `flash` | How a new page comes in as the category changes: from the theme's `bg_color`, or out of a flash. Colors and More > Page Transition overrides it. |
+
+## The Grid's extras (build 92)
+
+On a `Grid` element (`main4` below stands for its name):
+
+| Key | Values | What it does |
+|---|---|---|
+| `coverless` | `title` (default), `serial` | `serial`: a game with no cover shows only its serial (SLUS-20482) on its case, in the in-game menu's pixel font, one line or two, as large as fits. |
+| `title` | `0` (default), `1` | The chosen game's name on a line of its own under the grid; the highlight stays on the case. |
+| `title_y` | 0 to 480 | That line (418). |
+| `title_font` | a font slot | Its face (0). RIPgrid uses Planet N (font5). |
+
 ## The launch disc (build 91)
 
 | Key | Values | What it does |
