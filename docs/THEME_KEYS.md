@@ -64,6 +64,7 @@ made:
 | `dpad_glyphs` | `hidden`, `shown`, `fade_in`, `fade_out` | The D-pad glyphs beside a drive's name. |
 | `category_order` | `launch_disc_first`, `memory_files_first` | Which end of the bar Memory Files sits. RIPFLOW uses `memory_files_first`. |
 | `source_name` | `pop`, `shown`, `fade`, `hidden` | Source Name (above). |
+| `page_buttons` | `l2r2`, `l1r1` (default: none) | Build 96: which shoulder buttons turn the game list's pages. `l2r2`: L2 / R2 turn pages and L1 / R1 switch categories; `l1r1` the other way round. Without it L2 goes to the top and R2 to the end. Controller Settings > Page Buttons overrides it. RIPgrid uses `l2r2`. |
 
 **The user always wins.** RIPPS2 remembers which of these rows the user has changed (saved as
 `ripps2_userset`). A theme's value shows only on a row the user has never touched that still holds its
@@ -113,12 +114,14 @@ everywhere. A theme can change that, move them, and reword them:
 
 On a `Grid` element (`main4` below stands for its name):
 
+From build 97 Right on a row's last cover turns to the next page (Left on its first, back), instead of wrapping to the next row; the chosen case turns over to its back cover on a 0.42 s hold of the right stick (RIPFLOW's centre cover too), and the grid is centred on its `x`.
+
 | Key | Values | What it does |
 |---|---|---|
 | `coverless` | `title` (default), `serial` | `serial`: a game with no cover shows only its serial (SLUS-20482) on its case, in the in-game menu's pixel font, one line or two, as large as fits. |
 | `title` | `0` (default), `1` | The chosen game's name on a line of its own under the grid; the highlight stays on the case. |
 | `title_y` | 0 to 480 | That line (418). |
-| `title_font` | a font slot | Its face (0). RIPgrid uses Planet N (font5). |
+| `title_font` | a font slot | Its face (0). RIPgrid uses RIPPS2 Sleek Bold at 22 (font7) from build 97. |
 
 ## The launch disc (build 91)
 
