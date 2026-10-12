@@ -21,27 +21,31 @@ No ELF to rebuild. Rely on the build, theme it.</p>
 </p>
 <p align="center"><sub>Written for people and coding agents alike: <a href="AGENTS.md">AGENTS.md</a> holds the rules (<code>CLAUDE.md</code>, <code>GEMINI.md</code> and <code>.github/copilot-instructions.md</code> point to it), <a href="docs/THEME_KEYS.md">THEME_KEYS.md</a> everything the engine does, and the tools check a theme before it gets near a PS2.</sub></p>
 
-> **[Download the themes](https://github.com/akilluminati47/RIPPS2-themes/releases/latest)** (Adapt, Adapt Rx, RIPgrid) | needs [RIPPS2 build 80](https://github.com/akilluminati47/RIPPS2/releases) or later (build 82 turns RIPgrid's cases over, build 83 centers every list title on its highlight bar, builds 91 and 92 give RIPgrid its launch disc, its serials on coverless cases and the name under the grid) | [RIPPS2](https://github.com/akilluminati47/RIPPS2), the PS2 front end
+> **[Download the themes](https://github.com/akilluminati47/RIPPS2-themes/releases/latest)** (Adapt, Adapt Rx; updated 10/11/2026 for RIPPS2 build 97) | needs [RIPPS2 build 80](https://github.com/akilluminati47/RIPPS2/releases) or later (build 83 centers every list title on its highlight bar, build 98 lets a theme's missing sounds come from your AUDIO folder) | **RIPgrid** and **RIPFLOW** are built into RIPPS2: nothing to copy | [RIPPS2](https://github.com/akilluminati47/RIPPS2), the PS2 front end
 
 ## The themes
 
 | Theme | Look | Needs RIPPS2 |
 |---|---|---|
 | **Adapt** / **Adapt Rx** | akilluminati47's Adapt (RiptOPL): each game's art under frosted glass (zoomed, not stretched, in 16:9) with Adapt's side bar as a frosted strip on the left, the game's cover in RIPPS2's case with its reflection and the disc on one side, the list on clear glass on the other (Rx swaps the list and the case, and puts LAUNCH DISC at the right of the bar, over its disc). The disc always sits right under LAUNCH DISC. Info page on clear glass with 4:3 screenshots, tipping with the right stick as one sheet; page morphs between them, Settings over the pillars, no towers on the game pages. The source name pops in (from build 81 as a toast: ALL GAMES, HDD GAMES...). The game list's case shows the front cover, then the back, crossfading; the info page puts its text on the other side from the list's (Adapt right, Adapt Rx left). | build 80 |
-| **RIPgrid** | Adapt's frosted screen and side bar with the games as a 4x2 cover grid; the selection breathes with a soft glow and tips with the right stick, games without a cover show as glass tiles with their name, and Circle cycles the sources. From build 82 a 2-second right-stick hold turns the chosen case over to its back cover (it stays turned), and pages slide in and out. From build 91 the game's disc pops in as it launches; from build 92 a game with no cover shows its serial on its case in pixel type, and the chosen game's name sits under the grid in Planet N. Set in [RIPPS2 Sleek](https://github.com/akilluminati47/RIPPS2-fonts), the face made for RIPPS2 (from the ELF, nothing to ship), with the Grunge theme's button glyphs. | build 80 |
+| **RIPgrid** *(built into RIPPS2 from build 91: pick it in Settings > Interface > Theme)* | Adapt's frosted screen and side bar with the games as a 4x2 cover grid, centred; the selection breathes with a soft glow and tips with the right stick, games without a cover show their serial in pixel type, and Circle cycles the sources. A 0.42 s right-stick hold turns the chosen case over to its back cover (build 97; it stays turned), pages slide in and out on L2 / R2 or at a row's edge, the game's disc pops in as it launches, and the chosen game's name sits under the grid in RIPPS2 Sleek Bold. It ships inside the ELF, so it is no longer in this pack. | built in |
 
 Install: copy a `thm_...` folder into a `THM` folder on your drive (USB, HDD, MMCE, memory card), as
 for any OPL theme, then pick it in RIPPS2's Settings > Interface > Theme, or hold SELECT on the game
-list for 4.2 seconds to step through the themes.
+list for 4.2 seconds to step through the themes. RIPgrid and RIPFLOW are already there.
+
+Every `conf_theme.cfg` here opens with its creation header (name, maker, created and updated dates,
+credits), then the **key glossary** ([docs/key_glossary.cfg](docs/key_glossary.cfg): every key a theme can
+use, as comments), then the theme. Copy the glossary into your own theme's config to keep it at hand.
 
 ### On the console
 - **Hold SELECT for 4.2 seconds** on the game list to step to the next theme (a quick press still refreshes the list).
 - **Right stick** tips the art: the whole info page as one plane, Adapt's case and disc, RIPgrid's chosen cover.
-- **RIPgrid**: the D-pad moves through the grid; **Circle** cycles the sources (USB, HDD, ALL GAMES...).
+- **RIPgrid** (built in): the D-pad moves through the grid, a row's edge turns the page; **Circle** cycles the sources (USB, HDD, ALL GAMES...).
 
 ## Make your own
 
-**[docs/THEME_KEYS.md](docs/THEME_KEYS.md) is the whole engine, as of RIPPS2 build 94**, all of it reachable
+**[docs/THEME_KEYS.md](docs/THEME_KEYS.md) is the whole engine, as of RIPPS2 build 98**, all of it reachable
 from a theme folder:
 
 | | What a theme can do |
@@ -60,10 +64,11 @@ from a theme folder:
 | [AGENTS.md](AGENTS.md) | The rules: read first. |
 | [docs/THEME_KEYS.md](docs/THEME_KEYS.md) | Everything RIPPS2's engine does for a theme: keys, elements, fonts, effects, images, sounds. |
 | [docs/THEME_ENGINE_RiptOPL.md](docs/THEME_ENGINE_RiptOPL.md) | The engine underneath (RiptOPL's reference). |
+| [docs/key_glossary.cfg](docs/key_glossary.cfg) | Every key on one page, as `#` comments: the glossary at the top of each `conf_theme.cfg` here. |
 | `tools/check_theme.py` | Will it load? Numbering, types, missing files, misplaced keys, values RIPPS2 knows, 8-bit images. |
 | `tools/mirror_theme.py` | Draft the other-side layout of a theme. |
 | `tools/png8.py` | Make every image an 8-bit palette PNG: RIPPS2 keeps those as 8-bit textures, a quarter of the VRAM. |
-| `tools/gen_adapt_family.py` | Writes the Adapt-family configs from one layout (edit it, not their `conf_theme.cfg`). |
+| `tools/gen_adapt_family.py` | Writes Adapt and Adapt Rx from one layout, each with its header and the glossary (edit it, not their `conf_theme.cfg`; set its `EDITION_DATE` when they change). |
 
 ```
 python3 tools/check_theme.py themes/*

@@ -19,13 +19,19 @@ RiptOPL's theme engine. Read these before changing anything.
 6. **If a look needs something the keys cannot express**, it is an engine change in RIPPS2
    (`elf/patches/` there), not a theme hack. Add the key to THEME_KEYS.md with the build it lands in,
    teach `tools/check_theme.py` about it, and keep the theme working on builds without it where you can.
-7. **The Adapt family** (Adapt, Adapt Rx, RIPgrid) is written by
-   `tools/gen_adapt_family.py`: change the layout there and run it, never their `conf_theme.cfg` by hand.
-8. **Credit** every asset's maker in the `conf_theme.cfg` header and in `themes/README.md`.
+7. **The Adapt themes** (Adapt, Adapt Rx) are written by `tools/gen_adapt_family.py`: change the layout
+   there and run it, never their `conf_theme.cfg` by hand. When they change, set its `EDITION_DATE` (and
+   `EDITION_BUILD`) to the day and build: that date is the theme pack's release date in every header.
+   RIPgrid and RIPFLOW are built into RIPPS2 (`<RIPgrid>`, `<RIPFLOW>`), so their layouts live in RIPPS2's
+   `elf/patches`, not here.
+8. **Every `conf_theme.cfg` opens with its creation header**: the theme's name, its maker, the date it was
+   created and the date it was last updated, and every asset's maker (credit them in `themes/README.md`
+   too). Then the **key glossary**, [docs/key_glossary.cfg](docs/key_glossary.cfg), all `#` comments; then
+   the theme. A new key goes into THEME_KEYS.md, the glossary and the checker together.
 9. **Everything is a theme key, not a rebuild.** [docs/THEME_KEYS.md](docs/THEME_KEYS.md) lists all a
    folder can do: fonts and RIPPS2's font slots, effects, replacing RIPPS2's own images by name, the 15
    sound events and `sound/bgm.ogg`, and a theme's own Colors and More (`color_theme`, `category_bar`,
-   `button_hints`, `dpad_glyphs`, `category_order`, `source_name`). Those are defaults: the user's own
+   `button_hints`, `dpad_glyphs`, `category_order`, `source_name`, `page_buttons`). Those are defaults: the user's own
    settings always win, so never rely on one to make a theme readable.
 10. Images: PNG, 640x480 for full-screen pieces, and **every PNG 8-bit palette**: RIPPS2 keeps those as
    8-bit textures (a quarter of the VRAM of RGBA, quicker to load; the frosted glass reads them fine).

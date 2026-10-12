@@ -1,5 +1,9 @@
-"""Write conf_theme.cfg for the Adapt-family themes (Adapt, Adapt Rx, RIPgrid) from one
-layout, so the shared pieces -- the frosted screen, the side bar, the info page -- stay in step.
+"""Write conf_theme.cfg for the Adapt themes (Adapt, Adapt Rx) from one layout, so the shared pieces -- the
+frosted screen, the side bar, the info page -- stay in step. RIPgrid is built into RIPPS2 (since build 91, as
+<RIPgrid>), so it is no longer written here.
+
+Each conf_theme.cfg opens with its creation header, then the key glossary (docs/key_glossary.cfg: every key a
+RIPPS2 theme can use), then the theme itself. Change EDITION_DATE and EDITION_BUILD when the themes change.
 
     python3 tools/gen_adapt_family.py
 
@@ -12,20 +16,34 @@ The whole info page (panel, logo, badges, text, screenshots) tips with the right
 the page's centre; the hint row and the backdrop hold still. Adapt's cover is RIPPS2's case (case +
 case_overlay, its reflection below), tipping with the disc; on the game list the case shows the front
 cover, then the back (COV2), crossfading as the info page's slideshow does (slide=1, 2). The info page
-sits on the other side from the game list's text: Adapt's text right, Adapt Rx's left. On RIPgrid only
-the chosen cover tips (front only), and its type is RIPPS2 Sleek from the ELF (builtin: fonts).
+sits on the other side from the game list's text: Adapt's text right, Adapt Rx's left.
 """
 import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-HEAD = """# Theme Name: {name}
-# Made by: akilluminati47 (Adapt RiptOPL, 8/27/2026), RIPPS2 edition (build 81)
-# [case.png] [case_overlay.png] RiptOPL's built-in case (b2); [SCR43.png] Adapt's screenshot frame at 4:3
-# RIPPS2: each game's art under frosted glass (a full-screen Ripps2PanelGlass, blur=1), a frosted side
-# bar, clear glass panels under the text, page morphs between the list and the info page, the pillars
-# behind Settings (no settings_bg), right-stick tilt on the art. Art eases in; no stock disc or case.
+EDITION_DATE = "10/11/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 97           # the RIPPS2 build it was made and checked on
+GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
+RULE = "# " + "=" * 102
+HEAD = RULE + """
+# Theme Name: {name}
+# Made by: akilluminati47
+# Created: 8/27/2026 (Adapt, for RiptOPL)
+# Updated: {date} (the RIPPS2 edition, made on RIPPS2 build {build}; needs RIPPS2 build 80 or later)
+# Credits: [case.png] [case_overlay.png] RiptOPL's built-in case (b2); [SCR43.png] Adapt's screenshot frame
+#   cut to 4:3; the fonts (a.ttf, b.ttf, c.ttf, d.ttf) and the other images as shipped in Adapt RiptOPL.
+# Look: each game's art under frosted glass (a full-screen Ripps2PanelGlass, blur=1), a frosted side bar on
+#   the left, clear glass panels under the text, page morphs between the list and the info page, the pillars
+#   behind Settings (no settings_bg), right-stick tilt on the art. Art eases in; no stock disc or case.
+#   {side}
+# Written by tools/gen_adapt_family.py (github.com/akilluminati47/RIPPS2-themes): change the layout there.
+""" + RULE + """
+#
+{glossary}
+#
+# ---- THIS THEME: the global keys, then the elements ---------------------------------------------------
 bg_color=#050A1C
 sel_text_color=#0064FF
 text_color=#FFFFFF
@@ -33,6 +51,11 @@ ui_text_color=#C4DAFF
 towers=0
 source_name=pop
 {fonts}"""
+
+SIDES = {
+    0: "Adapt: the case and disc left, under LAUNCH DISC, the list right; the info page's text right.",
+    1: "Adapt Rx: the list left, the case and disc right, under LAUNCH DISC; the info page's text left.",
+}
 
 # Adapt's own type (its TTFs ship in the theme)
 ADAPT_FONTS = """default_font=a.ttf
@@ -43,21 +66,6 @@ font3=d.ttf
 font4=b.ttf
 font4_size=20
 """
-# RIPgrid: RIPPS2 Sleek, the face made for RIPPS2, loaded from the ELF (nothing to ship). The same slots,
-# in its weights: Sleek for the source name and hints, Sleek Bold for the grid's names and the release
-# line, Sleek Bold Case (a true lowercase) for descriptions and anything typed.
-RIPGRID_FONTS = """default_font=builtin:ripps2sleek
-default_font_size=17
-font1=builtin:ripps2sleekcase
-font1_size=16
-font2=builtin:ripps2sleek
-font2_size=17
-font3=builtin:ripps2sleekbold
-font3_size=16
-font4=builtin:ripps2sleekbold
-font4_size=20
-"""
-
 FROST_TINT, PANEL_TINT, BAR_TINT, RULE_TINT = 24, 44, 88, 22
 INFO_TILT = dict(tilt=1, tilt_x=320, tilt_y=260, tilt_scale=75)  # the info page: one plane
 
@@ -188,36 +196,24 @@ def adapt(rx):
     return main, apps
 
 
-def ripgrid(rx):
-    # 4 x 2 covers centred in the room the side bar leaves; the highlight says which game it is, and only
-    # it tips with the right stick (about its own centre; tilt_scale lets it turn further than a page)
-    main = backdrop("main") + [
-        block("main4", type="Grid", pattern="COV", x=340, y=62, width=120, height=168,
-              columns=4, rows=2, spacing=16, font=4, tilt=1, tilt_scale=160),
-        block("main5", type="ItemsList", x="POS_MID", y=45, width="DIM_INF", height=24, aligned=1,
-              font=4, hidden=1),
-    ] + common_tail("main", 6)
-    return main, []
-
-
-def write(folder, name, main, mainApps, infoEls, infoApps, extra="", fonts=ADAPT_FONTS):
-    text = HEAD.format(name=name, fonts=fonts) + extra + "\n" + "\n".join(main + infoEls + mainApps + infoApps) + "\n"
+def write(folder, name, rx, main, mainApps, infoEls, infoApps, extra=""):
+    glossary = open(GLOSSARY, encoding="utf-8").read().rstrip("\n")
+    for n, line in enumerate(glossary.split("\n"), 1):
+        if line and not line.startswith("#"):
+            raise SystemExit("docs/key_glossary.cfg line %d is not a comment: %r" % (n, line[:60]))
+    text = HEAD.format(name=name, date=EDITION_DATE, build=EDITION_BUILD, side=SIDES[rx], glossary=glossary,
+                       fonts=ADAPT_FONTS) + extra + "\n" + "\n".join(main + infoEls + mainApps + infoApps) + "\n"
     with open(os.path.join(ROOT, folder, "conf_theme.cfg"), "w", newline="\n") as f:
         f.write(text)
     print("wrote", folder)
 
 
 if __name__ == "__main__":
-    # RIPgrid has one side: the grid fills the page, so there is nothing to mirror
-    for folder, name, make, rx in (("thm_Adapt", "Adapt", adapt, 0), ("thm_Adapt Rx", "Adapt Rx", adapt, 1),
-                                   ("thm_RIPgrid", "RIPgrid", ripgrid, 0)):
-        m, ma = make(rx)
+    for folder, name, rx in (("thm_Adapt", "Adapt", 0), ("thm_Adapt Rx", "Adapt Rx", 1)):
+        m, ma = adapt(rx)
         # the info page puts its text on the other side from the game list's: Adapt (list right) gets
-        # text right and pictures left, Adapt Rx (list left) the reverse; RIPgrid keeps text left
-        i, ia = info(1 - rx) if make is adapt else info(rx)
+        # text right and pictures left, Adapt Rx (list left) the reverse
+        i, ia = info(1 - rx)
         # Rx: LAUNCH DISC at the bar's right end, over its disc (a default: the user's own order wins)
         extra = "category_order=memory_files_first\n" if rx else ""
-        if make is ripgrid:
-            extra += ("# RIPgrid's type: RIPPS2 Sleek (Regular, Bold, Bold Case), built into RIPPS2 (builtin: fonts)\n"
-                      "# [circle.png] [cross.png] [square.png] [triangle.png] [select.png] [start.png] from the Grunge theme\n")
-        write(folder, name, m, ma, i, ia, extra, RIPGRID_FONTS if make is ripgrid else ADAPT_FONTS)
+        write(folder, name, rx, m, ma, i, ia, extra)

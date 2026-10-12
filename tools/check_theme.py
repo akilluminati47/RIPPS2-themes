@@ -2,7 +2,7 @@
 
     python3 tools/check_theme.py "themes/thm_Adapt"
 
-Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 81):
+Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPPS2 build 98):
 - main and info are numbered 0, 1, 2... with no gap (the engine stops reading at the first missing
   number); every other family (appsMain, vcdInfo...) replaces its base family's element of the same
   number, so a number past the base family's last is never read;
@@ -11,7 +11,8 @@ Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPP
 - RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing/back_pattern
   on Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
 - a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one;
-- source_name, color_theme, category_bar, button_hints, dpad_glyphs and category_order hold values RIPPS2 knows;
+- source_name, color_theme, category_bar, button_hints, dpad_glyphs, category_order, the hint, glyph, category
+  bar and launch disc keys, page_buttons and a Grid's coverless hold values RIPPS2 knows;
 - every PNG is an 8-bit palette PNG (a warning: RGBA ones cost four times the VRAM; tools/png8.py).
 Exit code 1 on an error; warnings do not fail.
 """
@@ -79,7 +80,12 @@ def main(folder):
     CHOICES = {"source_name": ("pop", "shown", "fade", "hidden"), "category_bar": ("shown", "fade", "hidden"),
                "button_hints": ("shown", "fade", "hidden"), "dpad_glyphs": ("hidden", "shown", "fade_in", "fade_out"),
                "category_order": ("launch_disc_first", "memory_files_first"),
-               "color_theme": ("ripps2", "ember", "blood", "ectoplasm", "amethyst", "bone")}
+               "color_theme": ("ripps2", "ember", "blood", "ectoplasm", "amethyst", "bone"),
+               # build 90: hints and glyphs; 91: the launch disc; 92: the category bar; 96: page buttons
+               "hints_labels": ("1", "0", "badge"), "hints_layout": ("row", "column"),
+               "glyph_set": ("theme", "ripps2", "standard", "white"), "launch_disc": ("pop", "spin"),
+               "category_font": ("ripps2", "theme"), "category_layout": ("row", "column"),
+               "category_transition": ("none", "fade", "flash"), "page_buttons": ("l2r2", "l1r1")}
     for key, values in CHOICES.items():
         if key in glob and glob[key].lower() not in values:
             errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))
@@ -129,6 +135,8 @@ def main(folder):
                     errors.append("%s: columns 1-8 and rows 1-4 (got %d x %d)" % (where, c, r))
                 if "back_pattern" in e and not re.match(r"^(0|[A-Za-z0-9]+)$", e["back_pattern"]):
                     errors.append("%s: back_pattern is an art suffix such as COV2 or SCR, or 0 (got %s)" % (where, e["back_pattern"]))
+                if e.get("coverless", "title") not in ("title", "serial"):  # build 92
+                    errors.append("%s: coverless is title or serial (got %s)" % (where, e["coverless"]))
         if fam in ("main", "appsMain") and ({"Grid", "Coverflow"} & set(types)) and "ItemsList" not in types:
             errors.append("%s: a Grid/Coverflow page needs an ItemsList (hidden=1), else a visible default list is added" % fam)
 
