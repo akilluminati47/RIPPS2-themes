@@ -1,4 +1,4 @@
-# What a RIPPS2 theme can do (build 99)
+# What a RIPPS2 theme can do (build 100)
 
 *Updated 10/12/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
 to sit at the top of a `conf_theme.cfg`, as they do in Adapt and Adapt Rx. RIPGRID and RIPFLOW are built into RIPPS2.*

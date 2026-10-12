@@ -21,7 +21,7 @@ No ELF to rebuild. Rely on the build, theme it.</p>
 </p>
 <p align="center"><sub>Written for people and coding agents alike: <a href="AGENTS.md">AGENTS.md</a> holds the rules (<code>CLAUDE.md</code>, <code>GEMINI.md</code> and <code>.github/copilot-instructions.md</code> point to it), <a href="docs/THEME_KEYS.md">THEME_KEYS.md</a> everything the engine does, and the tools check a theme before it gets near a PS2.</sub></p>
 
-> **[Download the themes](https://github.com/akilluminati47/RIPPS2-themes/releases/latest)** (Adapt, Adapt Rx; updated 10/12/2026 for RIPPS2 build 99) | needs [RIPPS2 build 80](https://github.com/akilluminati47/RIPPS2/releases) or later (build 83 centers every list title on its highlight bar, build 98 lets a theme's missing sounds come from your AUDIO folder) | **RIPGRID** and **RIPFLOW** are built into RIPPS2: nothing to copy | [RIPPS2](https://github.com/akilluminati47/RIPPS2), the PS2 front end
+> **[Download the themes](https://github.com/akilluminati47/RIPPS2-themes/releases/latest)** (Adapt, Adapt Rx; updated 10/12/2026 for RIPPS2 build 100) | needs [RIPPS2 build 80](https://github.com/akilluminati47/RIPPS2/releases) or later (build 83 centers every list title on its highlight bar, build 98 lets a theme's missing sounds come from your AUDIO folder) | **RIPGRID** and **RIPFLOW** are built into RIPPS2: nothing to copy | [RIPPS2](https://github.com/akilluminati47/RIPPS2), the PS2 front end
 
 ## The themes
 
@@ -45,7 +45,7 @@ use, as comments), then the theme. Copy the glossary into your own theme's confi
 
 ## Make your own
 
-**[docs/THEME_KEYS.md](docs/THEME_KEYS.md) is the whole engine, as of RIPPS2 build 99**, all of it reachable
+**[docs/THEME_KEYS.md](docs/THEME_KEYS.md) is the whole engine, as of RIPPS2 build 100**, all of it reachable
 from a theme folder:
 
 | | What a theme can do |

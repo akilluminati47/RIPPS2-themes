@@ -23,7 +23,7 @@ import os
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
 EDITION_DATE = "10/12/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 99           # the RIPPS2 build it was made and checked on
+EDITION_BUILD = 100          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
