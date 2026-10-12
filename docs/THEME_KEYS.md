@@ -1,7 +1,7 @@
 # What a RIPPS2 theme can do (build 98)
 
-*Updated 10/11/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
-to sit at the top of a `conf_theme.cfg`, as they do in Adapt and Adapt Rx. RIPgrid and RIPFLOW are built into RIPPS2.*
+*Updated 10/12/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
+to sit at the top of a `conf_theme.cfg`, as they do in Adapt and Adapt Rx. RIPGRID and RIPFLOW are built into RIPPS2.*
 
 A RIPPS2 theme is a folder, `THM/thm_<Name>/`, on any drive RIPPS2 reads (USB, HDD, MMCE, a memory
 card's `OPL/THM`). Everything on this page is driven from that folder: `conf_theme.cfg`, its images,
@@ -48,6 +48,7 @@ screenshots).
 | `<font>_size` | pixels | OPL | `font4_size=20`. |
 | `<font>_caps` | `0` / `1` | 70 | `1`: that font draws in capitals. |
 | `towers` | `0` / `1` (default 1) | 78 | `0`: the game pages never show RIPPS2's pillars. Where a page has no image (a game without art, or art still fading in) `bg_color` shows instead. Settings keep the pillars behind glass unless the theme ships `settings_bg`. |
+| `bg_blur` | `off`, `weak`, `normal`, `strong` (default strong) | 98 | How hard frosted glass (`Ripps2PanelGlass` with `blur=1`) blurs the game's art: the blurred copy is laid over the sharp art at 0, 33, 66 or 100 %. A theme default: Artwork settings > Background Blur overrides it. RIPGRID and Adapt use `weak`. |
 | `source_name` | `pop`, `shown`, `fade`, `hidden` | 80 / 81 | How the source's name (ALL GAMES, HDD GAMES...) appears. `pop` (build 81): not drawn over the list, it plays as a toast in the middle of the page, the whole name in big capitals, on the first list after boot, on a source change and on coming back to Storage, then fades. `shown` / `fade` (with the category bar's idle fade) / `hidden` (build 81). A theme default: [the user wins](#colors-and-more-from-the-theme-build-81). |
 | `use_settings_bg` | `0` / `1` | OPL | `1` + `settings_bg.png`: Settings over that picture. Leave it out for the pillars behind RIPPS2's glass page panel. |
 | `use_default` | `0` / `1` (default 1) | OPL | `0`: an image the theme does not ship stays empty instead of falling back to RIPPS2's own. |
@@ -67,7 +68,7 @@ made:
 | `dpad_glyphs` | `hidden`, `shown`, `fade_in`, `fade_out` | The D-pad glyphs beside a drive's name. |
 | `category_order` | `launch_disc_first`, `memory_files_first` | Which end of the bar Memory Files sits. RIPFLOW uses `memory_files_first`. |
 | `source_name` | `pop`, `shown`, `fade`, `hidden` | Source Name (above). |
-| `page_buttons` | `l2r2`, `l1r1` (default: none) | Build 96: which shoulder buttons turn the game list's pages. `l2r2`: L2 / R2 turn pages and L1 / R1 switch categories; `l1r1` the other way round. Without it L2 goes to the top and R2 to the end. Controller Settings > Page Buttons overrides it. RIPgrid uses `l2r2`. |
+| `page_buttons` | `l2r2`, `l1r1` (default: none) | Build 96: which shoulder buttons turn the game list's pages. `l2r2`: L2 / R2 turn pages and L1 / R1 switch categories; `l1r1` the other way round. Without it L2 goes to the top and R2 to the end. Controller Settings > Page Buttons overrides it. RIPGRID uses `l2r2`. |
 
 **The user always wins.** RIPPS2 remembers which of these rows the user has changed (saved as
 `ripps2_userset`). A theme's value shows only on a row the user has never touched that still holds its
@@ -124,13 +125,14 @@ From build 97 Right on a row's last cover turns to the next page (Left on its fi
 | `coverless` | `title` (default), `serial` | `serial`: a game with no cover shows only its serial (SLUS-20482) on its case, in the in-game menu's pixel font, one line or two, as large as fits. |
 | `title` | `0` (default), `1` | The chosen game's name on a line of its own under the grid; the highlight stays on the case. |
 | `title_y` | 0 to 480 | That line (418). |
-| `title_font` | a font slot | Its face (0). RIPgrid uses RIPPS2 Sleek Bold at 22 (font7) from build 97. |
+| `title_font` | a font slot | Its face (0). RIPGRID uses RIPPS2 Sleek Bold at 22 (font7) from build 97. |
+| `wide_columns`, `wide_rows`, `wide_width`, `wide_height`, `wide_spacing` | as their standard keys | Build 98: the page on a 16:9 picture only (widescreen, 720p, 1080i), where a cover draws at three quarters of its width so more fit across; each key left out keeps the standard value. Flow and Grid > Widescreen Grid Layout can override it (Same as Grid Layout, 6 x 2, 7 x 2, 5 x 2 Large, 8 x 3 Compact). RIPGRID uses `wide_columns=6`. |
 
 ## The launch disc (build 91)
 
 | Key | Values | What it does |
 |---|---|---|
-| `launch_disc` | `pop`, `spin` (default: none) | As a game launches, its disc comes in over the middle of the screen: the game's ICO art, else `launch_disc.png` (yours, or RIPPS2's disc). `pop` settles in like the L3 logos and fades; `spin` settles in, then turns faster and faster and never fades. The user can override it in Flow and Grid > Launch Disc. RIPgrid uses `pop`, RIPFLOW `spin`. |
+| `launch_disc` | `pop`, `spin` (default: none) | As a game launches, its disc comes in over the middle of the screen: the game's ICO art, else `launch_disc.png` (yours, or RIPPS2's disc). `pop` settles in like the L3 logos and fades; `spin` settles in, then turns faster and faster and never fades. The user can override it in Flow and Grid > Launch Disc. RIPGRID uses `pop`, RIPFLOW `spin`. |
 
 ## Fonts
 
@@ -227,7 +229,7 @@ without one.
 - **The frosted screen** (build 79). A full-screen panel straight after the `Background`,
   `x=0 y=0 width=640 height=480 aligned=0 blur=1 tint=24 frame=0`, puts every game's art under frosted
   glass: no hard edges, no stretched pixels, and what sits on it stays readable. Panels after it frost
-  the same art, so they read as one sheet. Adapt and RIPgrid do this.
+  the same art, so they read as one sheet. Adapt and RIPGRID do this.
 - **A side bar** is two frameless panels: a dark strip (`tint=88 tint_color=#01040F`) and a light rule
   beside it (`tint=22 tint_color=#28C5F9`).
 - **Page transitions.** RIPPS2 morphs one page's glass into the next between the game list and the info

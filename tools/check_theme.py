@@ -85,7 +85,8 @@ def main(folder):
                "hints_labels": ("1", "0", "badge"), "hints_layout": ("row", "column"),
                "glyph_set": ("theme", "ripps2", "standard", "white"), "launch_disc": ("pop", "spin"),
                "category_font": ("ripps2", "theme"), "category_layout": ("row", "column"),
-               "category_transition": ("none", "fade", "flash"), "page_buttons": ("l2r2", "l1r1")}
+               "category_transition": ("none", "fade", "flash"), "page_buttons": ("l2r2", "l1r1"),
+               "bg_blur": ("off", "weak", "normal", "strong")}  # build 98
     for key, values in CHOICES.items():
         if key in glob and glob[key].lower() not in values:
             errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))

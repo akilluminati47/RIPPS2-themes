@@ -1,6 +1,6 @@
 """Write conf_theme.cfg for the Adapt themes (Adapt, Adapt Rx) from one layout, so the shared pieces -- the
-frosted screen, the side bar, the info page -- stay in step. RIPgrid is built into RIPPS2 (since build 91, as
-<RIPgrid>), so it is no longer written here.
+frosted screen, the side bar, the info page -- stay in step. RIPGRID is built into RIPPS2 (since build 91, as
+<RIPGRID>), so it is no longer written here.
 
 Each conf_theme.cfg opens with its creation header, then the key glossary (docs/key_glossary.cfg: every key a
 RIPPS2 theme can use), then the theme itself. Change EDITION_DATE and EDITION_BUILD when the themes change.
@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/11/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 97           # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/12/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 98           # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -49,6 +49,7 @@ sel_text_color=#0064FF
 text_color=#FFFFFF
 ui_text_color=#C4DAFF
 towers=0
+bg_blur=weak
 source_name=pop
 {fonts}"""
 

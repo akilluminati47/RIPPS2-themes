@@ -22,7 +22,7 @@ RiptOPL's theme engine. Read these before changing anything.
 7. **The Adapt themes** (Adapt, Adapt Rx) are written by `tools/gen_adapt_family.py`: change the layout
    there and run it, never their `conf_theme.cfg` by hand. When they change, set its `EDITION_DATE` (and
    `EDITION_BUILD`) to the day and build: that date is the theme pack's release date in every header.
-   RIPgrid and RIPFLOW are built into RIPPS2 (`<RIPgrid>`, `<RIPFLOW>`), so their layouts live in RIPPS2's
+   RIPGRID and RIPFLOW are built into RIPPS2 (`<RIPGRID>`, `<RIPFLOW>`), so their layouts live in RIPPS2's
    `elf/patches`, not here.
 8. **Every `conf_theme.cfg` opens with its creation header**: the theme's name, its maker, the date it was
    created and the date it was last updated, and every asset's maker (credit them in `themes/README.md`
