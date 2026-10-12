@@ -272,7 +272,10 @@ kept). Leave one out and RIPPS2 uses its own, unless `use_default=0`.
 A theme's `sound/` folder gives the theme its own sounds while it is on: any of the 15 events, as
 `.adp` (mono SPU2 ADPCM; RIPPS2 Audio Studio converts any sound). RIPPS2 has no sounds of its own from
 build 95: the user rips theirs into the AUDIO folder. From build 98 an event the theme leaves out plays
-the AUDIO folder's (builds 95 to 97 played nothing for it).
+the AUDIO folder's (builds 95 to 97 played nothing for it). From build 100 the AUDIO folder fills only
+what the theme's set leaves silent: an event the theme covers through the sound it falls back to (its
+`transition` for page in and out, its `message` for error and save, its `cursor` for random) keeps the
+theme's. Adapt and Adapt Rx ship no sounds (10/12/2026), so every sound with them on is the user's own rip.
 
 | File | Plays |
 |---|---|
