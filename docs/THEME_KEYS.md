@@ -1,6 +1,6 @@
-# What a RIPPS2 theme can do (build 100)
+# What a RIPPS2 theme can do (build 102)
 
-*Updated 10/12/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
+*Updated 10/17/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
 to sit at the top of a `conf_theme.cfg`, as they do in Adapt and Adapt Rx. RIPGRID and RIPFLOW are built into RIPPS2.*
 
 A RIPPS2 theme is a folder, `THM/thm_<Name>/`, on any drive RIPPS2 reads (USB, HDD, MMCE, a memory
@@ -277,6 +277,10 @@ what the theme's set leaves silent: an event the theme covers through the sound 
 `transition` for page in and out, its `message` for error and save, its `cursor` for random) keeps the
 theme's. Adapt and Adapt Rx ship no sounds (10/12/2026), so every sound with them on is the user's own rip.
 
+From build 102 `sounds=audio` makes that certain: the theme always plays the AUDIO folder's sounds and never a
+`sound/` folder of its own, even one an older edition left behind when a new one was copied over it (Adapt
+shipped six sounds up to build 99). Adapt and Adapt Rx set it.
+
 | File | Plays |
 |---|---|
 | `boot.adp` | as the towers rise at power on |
@@ -305,10 +309,13 @@ is loaded into the SPU2's 2 MB at once (music streams), so keep the set small.
 - Colors and More, with the theme's own defaults where it gives them.
 - Hints and Glyphs (build 90): the user can hide, reorder or relabel the hints and pick a glyph set on any theme.
 - 720p and 1080i in one pass at full detail (build 75).
+- Build 102: the Colours page edits the theme's own colours too (kept for that theme; Reset gives back its
+  file's), an app's case is a PS1 square unless its menu (Triangle > Case Shape) says PS2 or Theme, a
+  reflection fades with its cover, long text slides smoothly, and About and STATUS read in RIPPS2's own faces.
 
 ## What a theme cannot change (yet)
 These are RIPPS2's own and need an engine change (`elf/patches` in RIPPS2), not a theme: the towers'
 and orbs' shapes and motion (a theme can turn the towers off and recolour them with `color_theme`), the
 layout of Launch Disc, Memory Files, STATUS and the Achievements pages (they take the theme's fonts and
-colours), where the view word and toasts sit, and the Grid glow's timing. If a look needs one of these,
+colours; About and STATUS keep RIPPS2's own faces from build 102), where the view word and toasts sit, and the Grid glow's timing. If a look needs one of these,
 ask for a key in RIPPS2's issues: new keys land here with the build that brings them.

@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/12/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 100          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/17/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 102          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -51,6 +51,10 @@ ui_text_color=#C4DAFF
 towers=0
 bg_blur=weak
 source_name=pop
+# RIPPS2 build 102: the Standard glyph set (L3 and R3 included), and the AUDIO folder's sounds (the ripped map)
+# even where an older Adapt left a sound folder in the theme
+glyph_set=standard
+sounds=audio
 {fonts}"""
 
 SIDES = {
@@ -66,7 +70,11 @@ font2=c.ttf
 font3=d.ttf
 font4=b.ttf
 font4_size=20
+font15=builtin:ripps2sleekcase
+font15_size=15
 """
+# font15 (build 102): RIPPS2 Sleek Case, the hints' face on every page (the hint rows, the menus' hints, RIPPS2's own
+# pages) as on RIPPS2's other themes; Adapt's own faces were hard to read that small
 FROST_TINT, PANEL_TINT, BAR_TINT, RULE_TINT = 24, 44, 88, 22
 INFO_TILT = dict(tilt=1, tilt_x=320, tilt_y=260, tilt_scale=75)  # the info page: one plane
 
@@ -76,6 +84,15 @@ def case(**kv):
     return dict(kv, width=143, height=201, aligned=1, scaled=1, reflection=1, overlay="case", overlay2="case_overlay",
                 overlay_ulx=0, overlay_uly=0, overlay_urx=143, overlay_ury=0,
                 overlay_llx=0, overlay_lly=201, overlay_lrx=143, overlay_lry=201)
+
+
+def square_case(**kv):
+    """Build 102: an app's case, square as a PS1 game's (user: "apps cases should display as ps1 square by default").
+    The app's Case Shape (its menu, Triangle) can make it a PS2 case."""
+    side = 160
+    return dict(kv, width=side, height=side, aligned=1, scaled=1, reflection=1, overlay="case", overlay2="case_overlay",
+                overlay_ulx=0, overlay_uly=0, overlay_urx=side, overlay_ury=0,
+                overlay_llx=0, overlay_lly=side, overlay_lrx=side, overlay_lry=side)
 
 
 def block(name, **kv):
@@ -101,10 +118,12 @@ def backdrop(fam):
 
 
 def screenshot(name, pattern, x, y):
-    # 4:3: a 160 x 120 window in a 170 x 128 frame; scaled=1 keeps it 4:3 on a 16:9 picture, as the case is
-    return block(name, type="GameImage", pattern=pattern, scaled=1, x=x, y=y, width=170, height=128, overlay="SCR43",
-                 overlay_ulx=6, overlay_uly=4, overlay_urx=166, overlay_ury=4,
-                 overlay_llx=6, overlay_lly=124, overlay_lrx=166, overlay_lry=124, **INFO_TILT)
+    # 4:3: the SCR43 frame at 160 x 120 (its window 6,4 to 156,116); scaled=1 keeps it 4:3 on a 16:9 picture, as the
+    # case is. Build 102: two of them stand flush with the text's glass (160 to 415), 15 apart (they were 170 x 128,
+    # 6 above the glass and 11 below it)
+    return block(name, type="GameImage", pattern=pattern, scaled=1, x=x, y=y, width=160, height=120, overlay="SCR43",
+                 overlay_ulx=6, overlay_uly=4, overlay_urx=156, overlay_ury=4,
+                 overlay_llx=6, overlay_lly=116, overlay_lrx=156, overlay_lry=116, **INFO_TILT)
 
 
 def info(rx):
@@ -115,7 +134,7 @@ def info(rx):
     tw = gw - 20              # text width
     tx = gx + 10              # text left
     ax = gx + 15              # first attribute icon
-    sx = 141 if rx else 532   # screenshots' centre
+    sx = 141 if rx else 540   # screenshots' centre: the middle of the room beside the glass (40-242, 440-640)
     els = backdrop("info") + [
         block("info4", type="Ripps2PanelGlass", aligned=0, x=gx, y=160, width=gw, height=255,
               blur=1, tint=PANEL_TINT, frame=1, **INFO_TILT),
@@ -133,18 +152,18 @@ def info(rx):
               width=tw, font=3, **INFO_TILT),
         block("info12", type="AttributeText", attribute="Genre", display=2, aligned=0, x=tx, y=385,
               width=tw, font=2, **INFO_TILT),
-        block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=3),
+        block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=15),
         # a hairline under the logo (its box ends at y 162), the lower frame still clear of the hints
-        screenshot("info14", "SCR", sx, 230),
-        screenshot("info15", "SCR2", sx, 362),
+        screenshot("info14", "SCR", sx, 220),
+        screenshot("info15", "SCR2", sx, 355),
         # the badge (54 px) 16 px inside the panel's right edge, whichever width the panel is
         block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=gx + gw - 70, y=330, **INFO_TILT),
         block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=173, **INFO_TILT),
         block("info18", type="AttributeImage", attribute="Aspect", aligned=0, x=ax + 222, y=173, **INFO_TILT),
     ]
-    # apps: the app's cover where the logo was, no screenshots
+    # apps: the app's case in the screenshots' place (build 102: a PS1 square, centred on the glass), no screenshots
     apps = [
-        block("appsInfo5", type="ItemCover", **case(x=sx, y=262, **INFO_TILT)),
+        block("appsInfo5", type="ItemCover", **square_case(x=sx, y=287, **INFO_TILT)),
         block("appsInfo14", type="GameImage", enabled=0),
         block("appsInfo15", type="GameImage", enabled=0),
     ]
@@ -154,7 +173,7 @@ def info(rx):
 def common_tail(fam, start):
     return [
         block("%s%d" % (fam, start), type="LoadingIcon", x=-60, y=-31),
-        block("%s%d" % (fam, start + 1), type="HintText", aligned=1, x="POS_MID", y=-41, font=2),
+        block("%s%d" % (fam, start + 1), type="HintText", aligned=1, x="POS_MID", y=-41, font=15),
         block("%s%d" % (fam, start + 2), type="MenuText", x="POS_MID", y=25, aligned=1, width=225, font=2),
     ]
 
@@ -184,15 +203,13 @@ def adapt(rx):
               tilt=1, tilt_x=cx, tilt_y=200),
         block("main8", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
     ] + common_tail("main", 9)
-    # apps: one wide glass list clear of the side bar (left in both), no cover or disc
-    ax = 48
+    # apps (build 102: "adapts apps viewport needs to be refit"): the games' page, its glass and list (main4, main8:
+    # under the category bar, where the apps' own wide glass from y 40 ran into it), with the app's case under LAUNCH
+    # DISC, a PS1 square centred on the glass (76-385), no back cover and no disc
     apps = [
-        block("appsMain4", type="Ripps2PanelGlass", aligned=0, x=ax, y=40, width=568, height=368,
-              blur=1, tint=PANEL_TINT, frame=1),
-        block("appsMain5", type="GameImage", enabled=0),
+        block("appsMain5", type="GameImage", pattern="COV", **square_case(x=cx, y=230, tilt=1, tilt_x=cx, tilt_y=200)),
         block("appsMain6", type="GameImage", enabled=0),
         block("appsMain7", type="ItemIcon", enabled=0),
-        block("appsMain8", type="ItemsList", x=ax + 10, y=75, aligned=0, width=548, height=323, font=4),
     ]
     return main, apps
 
