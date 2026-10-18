@@ -79,20 +79,30 @@ FROST_TINT, PANEL_TINT, BAR_TINT, RULE_TINT = 24, 44, 88, 22
 INFO_TILT = dict(tilt=1, tilt_x=320, tilt_y=260, tilt_scale=75)  # the info page: one plane
 
 
-def case(**kv):
-    """RIPPS2's case around the cover, true scale, with its reflection (the built-in theme's own keys)."""
-    return dict(kv, width=143, height=201, aligned=1, scaled=1, reflection=1, overlay="case", overlay2="case_overlay",
-                overlay_ulx=0, overlay_uly=0, overlay_urx=143, overlay_ury=0,
-                overlay_llx=0, overlay_lly=201, overlay_lrx=143, overlay_lry=201)
+def case(w=143, h=201, **kv):
+    """RIPPS2's case around the cover (143 x 201: true scale beside RIPPS2's 127 px disc), with its reflection (the
+    built-in theme's own keys)."""
+    return dict(kv, width=w, height=h, aligned=1, scaled=1, reflection=1, overlay="case", overlay2="case_overlay",
+                overlay_ulx=0, overlay_uly=0, overlay_urx=w, overlay_ury=0,
+                overlay_llx=0, overlay_lly=h, overlay_lrx=w, overlay_lry=h)
 
 
-def square_case(**kv):
+def square_case(side=160, **kv):
     """Build 102: an app's case, square as a PS1 game's (user: "apps cases should display as ps1 square by default").
     The app's Case Shape (its menu, Triangle) can make it a PS2 case."""
-    side = 160
-    return dict(kv, width=side, height=side, aligned=1, scaled=1, reflection=1, overlay="case", overlay2="case_overlay",
-                overlay_ulx=0, overlay_uly=0, overlay_urx=side, overlay_ury=0,
-                overlay_llx=0, overlay_lly=side, overlay_lrx=side, overlay_lry=side)
+    return case(side, side, **kv)
+
+
+# Build 102 (user: "adapt would look nicer if its disc and case were lined up lower instead of sitting proud above the
+# other content, but I want them to have proportions to each other like in real life"): a 120 mm disc over a
+# 135 x 190 mm case, as tall together as the list's glass (76 to 385) with 9 between: 0.97 px a millimetre, so the
+# disc 116, the case 131 x 184. The disc's top is the glass's top, the case's foot the glass's foot. Up to edition
+# 100 the disc (112, a size of its own) stood at 44, up by the category bar, over a 143 x 201 case.
+GLASS_TOP, GLASS_BOTTOM = 76, 385
+DISC, CASE_W, CASE_H, DISC_GAP = 116, 131, 184, 9
+DISC_Y = GLASS_TOP + DISC // 2           # the disc's centre: 134
+CASE_Y = GLASS_BOTTOM - CASE_H // 2      # the case's centre: 293
+GROUP_Y = (GLASS_TOP + GLASS_BOTTOM) // 2  # the pair tips about its own middle
 
 
 def block(name, **kv):
@@ -138,8 +148,11 @@ def info(rx):
     els = backdrop("info") + [
         block("info4", type="Ripps2PanelGlass", aligned=0, x=gx, y=160, width=gw, height=255,
               blur=1, tint=PANEL_TINT, frame=1, **INFO_TILT),
-        block("info5", type="GameImage", pattern="LGO", x="POS_MID", y=100, aligned=1, width=300,
-              height=125, **INFO_TILT),
+        # build 102 (user: "the logos should not run into the info boxes on any theme, have them just above"): the
+        # logo's box ends at 158, 2 above the glass (160), and valign=bottom stands its lowest visible row there,
+        # however much clear space its image has round it
+        block("info5", type="GameImage", pattern="LGO", x="POS_MID", y=95, aligned=1, width=300,
+              height=125, valign="bottom", **INFO_TILT),
         block("info6", type="AttributeImage", attribute="Rating", default="rating/0_Rating", aligned=0, x=ax, y=177, **INFO_TILT),
         block("info7", type="AttributeImage", attribute="Scan", aligned=0, x=ax + 172, y=173, **INFO_TILT),
         block("info8", type="AttributeImage", attribute="Players", aligned=0, x=ax + 122, y=173, **INFO_TILT),
@@ -153,7 +166,7 @@ def info(rx):
         block("info12", type="AttributeText", attribute="Genre", display=2, aligned=0, x=tx, y=385,
               width=tw, font=2, **INFO_TILT),
         block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=15),
-        # a hairline under the logo (its box ends at y 162), the lower frame still clear of the hints
+        # the screenshots flush with the glass (160 to 415), 15 apart, the lower one still clear of the hints
         screenshot("info14", "SCR", sx, 220),
         screenshot("info15", "SCR2", sx, 355),
         # the badge (54 px) 16 px inside the panel's right edge, whichever width the panel is
@@ -192,22 +205,26 @@ def adapt(rx):
     gw = 368 if rx else 408   # list glass width
     lw = gw - 24              # the list inside the glass
     main = backdrop("main") + [
-        block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=76, width=gw, height=309,
+        block("main4", type="Ripps2PanelGlass", aligned=0, x=gx, y=GLASS_TOP, width=gw, height=GLASS_BOTTOM - GLASS_TOP,
               blur=1, tint=PANEL_TINT, frame=1),
         # the case: the front cover, then the back, crossfading (the slideshow; a game with no back
         # cover keeps its front). The front is the list's cover (COV), so it still loads first.
-        block("main5", type="GameImage", pattern="COV", slide=1, **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
-        block("main6", type="GameImage", pattern="COV2", slide=2, **case(x=cx, y=262, tilt=1, tilt_x=cx, tilt_y=200)),
-        # the disc: clear of the LAUNCH DISC label above (y 30) and of the case below (its top at 161)
-        block("main7", type="ItemIcon", aligned=1, scaled=1, x=cx, y=100, width=112, height=112,
-              tilt=1, tilt_x=cx, tilt_y=200),
+        block("main5", type="GameImage", pattern="COV", slide=1,
+              **case(CASE_W, CASE_H, x=cx, y=CASE_Y, tilt=1, tilt_x=cx, tilt_y=GROUP_Y)),
+        block("main6", type="GameImage", pattern="COV2", slide=2,
+              **case(CASE_W, CASE_H, x=cx, y=CASE_Y, tilt=1, tilt_x=cx, tilt_y=GROUP_Y)),
+        # the disc over its case, true to it (DISC above)
+        block("main7", type="ItemIcon", aligned=1, scaled=1, x=cx, y=DISC_Y, width=DISC, height=DISC,
+              tilt=1, tilt_x=cx, tilt_y=GROUP_Y),
         block("main8", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
     ] + common_tail("main", 9)
     # apps (build 102: "adapts apps viewport needs to be refit"): the games' page, its glass and list (main4, main8:
     # under the category bar, where the apps' own wide glass from y 40 ran into it), with the app's case under LAUNCH
-    # DISC, a PS1 square centred on the glass (76-385), no back cover and no disc
+    # DISC, a PS1 square as wide as the games' case and standing where it stands (its foot on the glass's), no back
+    # cover and no disc
     apps = [
-        block("appsMain5", type="GameImage", pattern="COV", **square_case(x=cx, y=230, tilt=1, tilt_x=cx, tilt_y=200)),
+        block("appsMain5", type="GameImage", pattern="COV",
+              **square_case(CASE_W, x=cx, y=GLASS_BOTTOM - CASE_W // 2, tilt=1, tilt_x=cx, tilt_y=GROUP_Y)),
         block("appsMain6", type="GameImage", enabled=0),
         block("appsMain7", type="ItemIcon", enabled=0),
     ]
