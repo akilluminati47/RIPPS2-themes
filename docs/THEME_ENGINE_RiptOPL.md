@@ -277,6 +277,11 @@ list only the highlighted row scrolls; the other rows end in "…".
 | Property | Used by | Notes |
 |---|---|---|
 | `decorator` | `ItemsList` | A `GameImage` pattern name to draw as per-row icons. |
+| `star` | `ItemsList` | RIPPS2 106: where a starred game's star sits. `left` (the default) gives it its own column at the start of every row, so titles stay lined up; `right` puts it after the title; `hidden` draws none. **Settings > Game Sources > Starred Games Star** overrides it. With the star on the left, the row icon moves to the row's right end. |
+| `star_image` | `ItemsList` | RIPPS2 106: the star's picture for this list (else the theme's `fav_mark.png`, else RIPPS2's). |
+| `highlight` | `ItemsList` | RIPPS2 106: the selected row. `bar` (the default, the PS2-blue bar), `line` (a line under the row) or `none`. |
+| `decorator_all` | `ItemsList` | RIPPS2 106: one picture drawn as every row's icon. |
+| `decorator_ps2`, `decorator_ps1`, `decorator_app` | `ItemsList` | RIPPS2 106: a row icon for each kind of row. A game's own icon (`decorator=ICO`) comes first, then its kind's, then `decorator_all`. |
 
 ### Per-device placement (`devices=`) — *this fork*
 

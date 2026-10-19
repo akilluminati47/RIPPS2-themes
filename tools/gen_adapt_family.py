@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/17/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 102          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/19/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 107          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -216,7 +216,7 @@ def adapt(rx):
         # the disc over its case, true to it (DISC above)
         block("main7", type="ItemIcon", aligned=1, scaled=1, x=cx, y=DISC_Y, width=DISC, height=DISC,
               tilt=1, tilt_x=cx, tilt_y=GROUP_Y),
-        block("main8", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4),
+        block("main8", type="ItemsList", x=gx + 12, y=88, aligned=0, width=lw, height=285, font=4, star="left"),
     ] + common_tail("main", 9)
     # apps (build 102: "adapts apps viewport needs to be refit"): the games' page, its glass and list (main4, main8:
     # under the category bar, where the apps' own wide glass from y 40 ran into it), with the app's case under LAUNCH

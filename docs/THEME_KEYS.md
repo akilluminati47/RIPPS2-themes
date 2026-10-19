@@ -223,6 +223,11 @@ without one.
 | `hidden` | `ItemsList` | RiptOPL | The list drives selection but is not drawn (Coverflow, Grid). |
 | `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text's line step; centre the block in its height. With either set, text longer than its box **rolls** through it. One-line text always scrolls in its room. |
 | `item_height` | `ItemsList` | 59 | Row pitch. The highlighted row's bar fills the row, and from build 83 every title is centred on its row by its own font's centreline (measured from the face), so any font sits in the middle of the bar with nothing to adjust. |
+| `star` | `ItemsList` | 106 | Where a starred game's star sits. `left` (the default, in every built-in theme and Adapt): its own column at the start of every row, so the titles stay lined up. `right`: after the title. `hidden`: none. The user's **Settings > Game Sources > Starred Games Star** wins. With the star on the left, the row icon (`decorator`) moves to the row's right end, so the two never overlap. |
+| `star_image` | `ItemsList` | 106 | The star's picture for this list. Without it: the theme's `fav_mark.png`, else RIPPS2's. |
+| `highlight` | `ItemsList` | 106 | The selected row: `bar` (the default: the PS2-blue bar with its light leading edge), `line` (a line under the row) or `none` (the selected title's colour alone). |
+| `decorator_all` | `ItemsList` | 106 | One picture drawn as every row's icon, for a list without per-game icons. |
+| `decorator_ps2`, `decorator_ps1`, `decorator_app` | `ItemsList` | 106 | A row icon for each kind of row: a PS2 game, a PS1 game, an app. A game's own icon (`decorator=ICO`, its `ART/<ID>_ICO`) comes first, then its kind's, then `decorator_all`, then the decorator's `default`. |
 | `devices` | any element | RiptOPL | Show the element only on some devices (see the engine reference). |
 
 ## Effects and tricks

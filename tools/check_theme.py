@@ -35,6 +35,8 @@ FAMILIES = ["main", "info", "appsMain", "appsInfo", "favsMain", "favsInfo", "vcd
 BASE = {f: ("info" if f.endswith("Info") else "main") for f in FAMILIES if f not in ("main", "info")}
 GRID_KEYS = {"columns", "rows", "spacing", "back_pattern"}
 GLASS_KEYS = {"blur", "tint", "tint_color", "frame"}  # build 78-79
+LIST_IMAGES = ("star_image", "decorator_all", "decorator_ps2", "decorator_ps1", "decorator_app")  # build 106
+LIST_KEYS = {"star", "highlight"} | set(LIST_IMAGES)
 
 
 def parse(path):
@@ -128,6 +130,15 @@ def main(folder):
                 errors.append("%s: tint_color is #RRGGBB (got %s)" % (where, e["tint_color"]))
             if t == "Grid" and "default" in e:
                 warnings.append("%s: a Grid default= puts that picture on every game without art (build 79 shows a glass tile with the name)" % where)
+            if LIST_KEYS & set(e) and t != "ItemsList":  # build 106
+                warnings.append("%s: star/star_image/highlight/decorator_* work only on ItemsList" % where)
+            if e.get("star", "left") not in ("left", "right", "hidden"):
+                errors.append("%s: star is left, right or hidden (got %s)" % (where, e["star"]))
+            if e.get("highlight", "bar") not in ("bar", "line", "none"):
+                errors.append("%s: highlight is bar, line or none (got %s)" % (where, e["highlight"]))
+            for key in LIST_IMAGES:
+                if key in e and not img(e[key]):
+                    errors.append("%s: %s=%s is missing" % (where, key, e[key]))
             if GRID_KEYS & set(e) and t != "Grid":
                 warnings.append("%s: columns/rows/spacing/back_pattern work only on Grid" % where)
             if t == "Grid":
