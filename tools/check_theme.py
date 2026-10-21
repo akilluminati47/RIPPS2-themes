@@ -139,6 +139,11 @@ def main(folder):
             for key in LIST_IMAGES:
                 if key in e and not img(e[key]):
                     errors.append("%s: %s=%s is missing" % (where, key, e[key]))
+            if e.get("pattern") == "SCRn":  # build 108: every shot in turn
+                if t != "GameImage":
+                    warnings.append("%s: pattern=SCRn works only on GameImage (it shows nothing here)" % where)
+            elif re.match(r"^SCR\d+$", e.get("pattern", "")) and int(e["pattern"][3:]) > 2:
+                warnings.append("%s: pattern=%s shows that one shot; pattern=SCRn (build 108) shows them all in turn" % (where, e["pattern"]))
             if GRID_KEYS & set(e) and t != "Grid":
                 warnings.append("%s: columns/rows/spacing/back_pattern work only on Grid" % where)
             if t == "Grid":
@@ -149,6 +154,9 @@ def main(folder):
                     errors.append("%s: back_pattern is an art suffix such as COV2 or SCR, or 0 (got %s)" % (where, e["back_pattern"]))
                 if e.get("coverless", "title") not in ("title", "serial"):  # build 92
                     errors.append("%s: coverless is title or serial (got %s)" % (where, e["coverless"]))
+        scrn = [i for i in nums if elems[(fam, i)].get("pattern") == "SCRn"]
+        if len(scrn) > 4:  # build 108: four SCRn boxes show their own shots; the rest show their default
+            warnings.append("%s: %d SCRn boxes; only the first four show shots" % (fam, len(scrn)))
         if fam in ("main", "appsMain") and ({"Grid", "Coverflow"} & set(types)) and "ItemsList" not in types:
             errors.append("%s: a Grid/Coverflow page needs an ItemsList (hidden=1), else a visible default list is added" % fam)
 

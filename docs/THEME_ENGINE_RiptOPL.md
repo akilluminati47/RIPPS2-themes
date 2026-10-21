@@ -190,7 +190,7 @@ Image-type elements (`StaticImage`, `GameImage`, `Background`, `AttributeImage`,
 | Property | Type | Notes |
 |---|---|---|
 | `default` | asset name | The image to draw (built-in name from §7, or a file in the theme folder). |
-| `pattern` | cache suffix | For dynamic art: `COV` (cover), `SCR`/`SCR2` (screenshots), `ICO`, `DISC`, … |
+| `pattern` | cache suffix | For dynamic art: `COV` (cover), `SCR`/`SCR2` (screenshots), `ICO`, `DISC`, … RIPPS2 108: `SCRn` on a `GameImage` shows `_SCR`, `_SCR2` .. `_SCR9` in turn (5 s each, 1 s crossfade); a second `SCRn` box starts one shot later. |
 | `count` | int | Number of cache slots for `pattern` (min 2 for `COV`). |
 | `overlay` | asset name | An optional frame drawn over the image (e.g. a case/bezel). |
 | `overlay_ulx`,`overlay_uly` | int | Upper-left corner of the inlaid image inside the overlay. |

@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/19/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 107          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/20/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 108          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -167,8 +167,8 @@ def info(rx):
               width=tw, font=2, **INFO_TILT),
         block("info13", type="InfoHintText", aligned=1, x="POS_MID", y=-41, font=15),
         # the screenshots flush with the glass (160 to 415), 15 apart, the lower one still clear of the hints
-        screenshot("info14", "SCR", sx, 220),
-        screenshot("info15", "SCR2", sx, 355),
+        screenshot("info14", "SCRn", sx, 220),  # build 108: every shot in turn, the lower box one shot later
+        screenshot("info15", "SCRn", sx, 355),
         # the badge (54 px) 16 px inside the panel's right edge, whichever width the panel is
         block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=gx + gw - 70, y=330, **INFO_TILT),
         block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=173, **INFO_TILT),

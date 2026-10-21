@@ -219,6 +219,7 @@ without one.
 | `alpha` | `GameImage` | 66 | Opacity 0-128. |
 | `widecrop` | `Background` | 79 | `1`: on a 16:9 picture 4:3 art zooms (its middle three quarters of height) instead of stretching. Frosted panels follow the crop. |
 | `valign` | `GameImage` | 102 | `bottom`: the art's lowest visible row stands on the box's bottom edge, however much clear space the image has round it. For logos set just above a panel: every game's logo sits the same distance above it. |
+| `pattern=SCRn` | `GameImage` | 108 | Every screenshot in turn: the game's `_SCR`, `_SCR2` .. `_SCR9` (RIPSHOT's ART shots and any the art set has), each for 5 s with a 1 s crossfade, as the slides do. A second `SCRn` box on the page starts one shot later (a third two later, up to four), so two boxes never show the same shot; a box with no shot of its own shows its `default`. As a `slide`, an `SCRn` element shows the next shot each time the show comes round (two `SCRn` slides: two new shots a round), as RIPPS2's own info page does. Shots count from `_SCR` with no gap. On builds before 108 the box shows its `default`. |
 | `slide` | `GameImage` | 59 | Slideshow position 1-4: the page's slides take turns (5 s each, a 1 s crossfade), each in its own place with its own overlay and reflection. Any page: the info page's art (BG, SCR, SCR2), or a game list's case showing the front cover (`COV`) then the back (`COV2`), as Adapt does (build 81). A game without a slide's art skips it. |
 | `hidden` | `ItemsList` | RiptOPL | The list drives selection but is not drawn (Coverflow, Grid). |
 | `line_height`, `vcenter` | `AttributeText` | 59 | Wrapped text's line step; centre the block in its height. With either set, text longer than its box **rolls** through it. One-line text always scrolls in its room. |
@@ -247,8 +248,9 @@ without one.
   tip together.
 - **RIPPS2's case**: an `ItemCover` at 143 x 201 with `overlay=case overlay2=case_overlay`, overlay
   corners at the four corners and `reflection=1`. `scaled=1` keeps it true on 16:9.
-- **4:3 screenshots on any screen**: a `GameImage` (`pattern=SCR`, then `SCR2`) with `scaled=1` in a
-  frame overlay (Adapt's `SCR43.png`).
+- **4:3 screenshots on any screen**: a `GameImage` with `scaled=1` in a frame overlay (Adapt's `SCR43.png`).
+  `pattern=SCRn` (build 108) on two boxes shows every shot the game has, two at a time; `SCR` and `SCR2` show
+  just those two.
 - **Art eases in** as it arrives; the info page's pieces appear as one group (up to 0.8 s).
 - **Rolling descriptions**: set `line_height` on a wrapped `AttributeText` and a long description rolls.
 - **Settings over the pillars**: leave out `use_settings_bg`.
