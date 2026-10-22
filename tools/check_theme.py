@@ -86,12 +86,24 @@ def main(folder):
                # build 90: hints and glyphs; 91: the launch disc; 92: the category bar; 96: page buttons
                "hints_labels": ("1", "0", "badge"), "hints_layout": ("row", "column"),
                "glyph_set": ("theme", "ripps2", "standard", "white"), "launch_disc": ("pop", "spin"),
-               "category_font": ("ripps2", "theme"), "category_layout": ("row", "column"),
+               "category_font": ("ripps2", "theme"), "category_layout": ("row", "column", "sidebar"),
                "category_transition": ("none", "fade", "flash"), "page_buttons": ("l2r2", "l1r1"),
-               "bg_blur": ("off", "weak", "normal", "strong")}  # build 98
+               "bg_blur": ("off", "weak", "normal", "strong"),  # build 98
+               # build 113: the categories a theme shows and the sidebar's bar
+               "categories": ("three", "storage"), "sidebar_bar": ("always", "pages", "never")}
     for key, values in CHOICES.items():
         if key in glob and glob[key].lower() not in values:
             errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))
+    # build 113: the sidebar's place, its glass and its accent strip
+    for key, lo, hi in (("sidebar_x", 0, 600), ("sidebar_width", 14, 80), ("sidebar_drawer", 80, 600)):
+        if key in glob and not (glob[key].isdigit() and lo <= int(glob[key]) <= hi):
+            errors.append("%s=%s: %d to %d pixels" % (key, glob[key], lo, hi))
+    for key in ("sidebar_color", "sidebar_accent_color"):
+        if key in glob and not re.match(r"^#[0-9A-Fa-f]{6}$", glob[key]):
+            errors.append("%s=%s: #RRGGBB" % (key, glob[key]))
+    for key in ("sidebar_tint", "sidebar_accent_tint"):
+        if key in glob and not (glob[key].isdigit() and 0 <= int(glob[key]) <= 128):
+            errors.append("%s=%s: 0-128" % (key, glob[key]))
     if glob.get("use_settings_bg") == "1" and not img("settings_bg"):
         errors.append("use_settings_bg=1 but settings_bg.png is missing")
 

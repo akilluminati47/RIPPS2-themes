@@ -108,11 +108,25 @@ everywhere. A theme can change that, move them, and reword them:
 | Key | Values | What it does |
 |---|---|---|
 | `category_font` | `ripps2` (default), `theme` | `theme`: the bar uses the theme's font2 (the current category) and font7 (the others). |
-| `category_layout` | `row` (default), `column` | `column`: the three stacked down the side, left aligned, the mark riding beside the current one (a sidebar). |
+| `category_layout` | `row` (default), `sidebar` | `sidebar` (build 113): the three as glyphs down a bar on the left; Left on a list (the cancel button on Launch Disc and Memory Files) focuses them, Up / Down opens each one's drawer with its name first (Storage's lists the sources), Cross enters it and Cross on an item goes there. No page titles. Colors and More > Category Layout overrides it. `column` means `sidebar` from build 113 (before it, a column of words). |
+| `categories` | `three`, `storage` | Build 113. `three`: Launch Disc, Storage and Memory Files. `storage`: Storage alone, Launch Disc and Memory Files in the START menu (backing out of either returns to Storage), L1 / R1 turn the list's pages. Unset, a theme that uses any of RIPPS2's keys gets `three` and one made for OPL gets `storage`. |
 | `category_x`, `category_y` | 0 to 640, 0 to 480 | A column's left edge and first line (40, 140). In a row, `category_y` moves the bar down (30). |
 | `category_spacing` | 12 to 120 | A column's line pitch (34). |
 | `category_label_launch`, `category_label_storage`, `category_label_files` | text | The words on the bar (RIPPS2's if not set). |
 | `category_transition` | `none`, `fade`, `flash` | How a new page comes in as the category changes: from the theme's `bg_color`, or out of a flash. Colors and More > Page Transition overrides it. |
+
+### The sidebar's bar (build 113)
+
+With `category_layout=sidebar` the glyphs sit in a bar on the left, Adapt's by default (its `main2` and `main3`
+frosted panels), and the drawer opens out of it, frosted on Storage like the bar.
+
+| Key | Values | What it does |
+|---|---|---|
+| `sidebar_x`, `sidebar_width` | 0 to 600, 14 to 80 | The bar the glyphs sit in (0, 26). |
+| `sidebar_drawer` | 80 to 600 | The drawer's right edge (216). |
+| `sidebar_bar` | `always` (default), `pages`, `never` | Where RIPPS2 draws the bar: every page, every page but Storage (the theme draws its own there, as Adapt does), or nowhere. |
+| `sidebar_color`, `sidebar_tint` | `#RRGGBB`, 0 to 128 | The bar's glass (`#01040F`, 88). The drawer's is deeper. |
+| `sidebar_accent_color`, `sidebar_accent_tint` | `#RRGGBB`, 0 to 128 | The strip beside the bar (`#28C5F9`, 22); tint 0 draws none. |
 
 ## The Grid's extras (build 92)
 

@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/20/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 108          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/22/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 113          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -55,6 +55,12 @@ source_name=pop
 # even where an older Adapt left a sound folder in the theme
 glyph_set=standard
 sounds=audio
+# RIPPS2 build 113: the three categories, as the sidebar: their glyphs in the frosted bar on the left, a drawer
+# opening out of it for each (Left on the list); RIPPS2 draws the bar on Launch Disc and Memory Files, this theme's
+# main2 / main3 are the bar on Storage
+categories=three
+category_layout=sidebar
+sidebar_bar=pages
 {fonts}"""
 
 SIDES = {
