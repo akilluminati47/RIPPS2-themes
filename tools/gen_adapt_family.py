@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/22/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 113          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/23/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 114          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -33,7 +33,9 @@ HEAD = RULE + """
 # Created: 8/27/2026 (Adapt, for RiptOPL)
 # Updated: {date} (the RIPPS2 edition, made on RIPPS2 build {build}; needs RIPPS2 build 80 or later)
 # Credits: [case.png] [case_overlay.png] RiptOPL's built-in case (b2); [SCR43.png] Adapt's screenshot frame
-#   cut to 4:3; the fonts (a.ttf, b.ttf, c.ttf, d.ttf) and the other images as shipped in Adapt RiptOPL.
+#   cut to 4:3; the font a.ttf and the other images as shipped in Adapt RiptOPL. Adapt's Roboto Condensed and
+#   Planet N Compact (b.ttf, c.ttf, d.ttf) are RIPPS2's built-in fonts since build 114: builtin:roboto at 700 and
+#   400, and builtin:ripps2.
 # Look: each game's art under frosted glass (a full-screen Ripps2PanelGlass, blur=1), a frosted side bar on
 #   the left, clear glass panels under the text, page morphs between the list and the info page, the pillars
 #   behind Settings (no settings_bg), right-stick tilt on the art. Art eases in; no stock disc or case.
@@ -68,14 +70,21 @@ SIDES = {
     1: "Adapt Rx: the list left, the case and disc right, under LAUNCH DISC; the info page's text left.",
 }
 
-# Adapt's own type (its TTFs ship in the theme)
+# Adapt's own type. Edition 114 (the font audit): a.ttf ships in the theme; Roboto Condensed Bold and Regular (b.ttf,
+# c.ttf) are RIPPS2's built-in variable Roboto at 700 and 400, Planet N Compact (d.ttf) its built-in menu face.
+# The fonts RIPPS2 carries, for any theme: builtin:ripps2 (Planet N Compact, the menus), builtin:ripps2sleek,
+# builtin:ripps2sleekbold, builtin:ripps2sleekcase (RIPPS2 Sleek: hints, bold, typed text), builtin:roboto (Roboto
+# Condensed 3.015, variable: font<N>_weight 400 to 700), builtin:ripflow (it at 400) and builtin:ripflowbold (at 700).
 ADAPT_FONTS = """default_font=a.ttf
 default_font_size=17
-font1=b.ttf
-font2=c.ttf
-font3=d.ttf
-font4=b.ttf
+font1=builtin:roboto
+font1_weight=700
+font2=builtin:roboto
+font2_weight=400
+font3=builtin:ripps2
+font4=builtin:roboto
 font4_size=20
+font4_weight=700
 font15=builtin:ripps2sleekcase
 font15_size=15
 """

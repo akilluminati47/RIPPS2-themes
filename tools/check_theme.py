@@ -23,7 +23,7 @@ import sys
 
 # fonts compiled into RIPPS2 (src/fntsys.c): a theme names them as builtin:<name> and ships nothing
 BUILTIN_FONTS = {"builtin:ripps2", "builtin:ripps2sleek", "builtin:ripps2sleekbold", "builtin:ripps2sleekcase",
-                 "builtin:ripflow", "builtin:ripflowbold"}
+                 "builtin:ripflow", "builtin:ripflowbold", "builtin:roboto"}  # roboto: build 114, variable (weights)
 
 TYPES = {"AttributeText", "StaticText", "AttributeImage", "GameImage", "StaticImage", "Background", "MenuIcon",
          "MenuText", "ItemsList", "ItemIcon", "ItemCover", "ItemText", "HintText", "InfoHintText", "LoadingIcon",
