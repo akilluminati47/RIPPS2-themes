@@ -159,8 +159,14 @@ or one of RIPPS2's built-in faces:
 | `builtin:ripps2sleek` | RIPPS2 Sleek: hints, menus, settings |
 | `builtin:ripps2sleekbold` | its bold weight: text beside big glyphs, the view word |
 | `builtin:ripps2sleekcase` | bold with a true lowercase: typed text, tooltips |
-| `builtin:ripflow` | Roboto Condensed (RIPFLOW's text) |
-| `builtin:ripflowbold` | Roboto Bold Condensed (RIPFLOW's menus) |
+| `builtin:ripflow` | Roboto Condensed (RIPFLOW's text; from build 114 the variable Roboto at 400) |
+| `builtin:ripflowbold` | Roboto Bold Condensed (RIPFLOW's menus; from build 114 the variable Roboto at 700) |
+| `builtin:roboto` | build 114: Roboto Condensed 3.015, variable, drawn at the slot's `font<N>_weight` |
+
+**`font1_weight` ... `font15_weight`** (and `default_font_weight`), build 114: the weight a slot is drawn at, 100 to 900.
+`builtin:roboto` is variable from 400 to 700; any other face is grown to the weight asked. Adapt and Adapt Rx (edition
+114) use `builtin:roboto` at 700 and 400 and `builtin:ripps2` in place of their own b.ttf, c.ttf and d.ttf; a build
+before 114 draws those slots in its default font.
 
 Elements pick a slot with `font=<n>`. RIPPS2's own pages (menus, the category bar, Memory Files, the CD
 player...) draw in fixed slots too, so **setting these restyles RIPPS2 itself**. A slot a theme leaves
