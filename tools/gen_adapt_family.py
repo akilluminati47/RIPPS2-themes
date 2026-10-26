@@ -63,11 +63,12 @@ sounds=audio
 # main2 / main3 are the bar on Storage. Build 115: category_layout alone says it (a theme that says neither row nor
 # sidebar gets the categories in the START menu, as a theme made for OPL)
 category_layout=sidebar
-sidebar_bar=pages
+sidebar_bar=always
 # RIPPS2 build 115: a hint glyph that changes fades in, as the covers do (on is RIPPS2's default; said here so the key
 # is in front of anyone making a theme from this one), and the sidebar as Adapt draws it: the dark bar and its strip
 hints_fade=1
-sidebar_style=split
+# edition 115 (the user, 10/26): the one-piece bar, RIPPS2's on every page
+sidebar_style=one_piece
 # RIPPS2 build 115: RIPPS2's own badges (RIPFLOW's set, with Players and the ESRB ratings), and its busy mark in the
 # corner, so the theme ships no badge folders and no loading frames
 badge_set=ripps2
@@ -98,9 +99,12 @@ font4_size=20
 font4_weight=700
 font15=builtin:ripps2sleekcase
 font15_size=15
+font6=builtin:ripps2sleekcase
+font6_size=18
 """
 # font15 (build 102): RIPPS2 Sleek Case, the hints' face on every page (the hint rows, the menus' hints, RIPPS2's own
-# pages) as on RIPPS2's other themes; Adapt's own faces were hard to read that small
+# pages) as on RIPPS2's other themes; Adapt's own faces were hard to read that small. font6 (edition 115): the text
+# beside a glyph on RIPPS2's own pages (START BROWSER, START LASER, the drawers' hints) in the same face
 FROST_TINT, PANEL_TINT, BAR_TINT, RULE_TINT = 24, 44, 88, 22
 INFO_TILT = dict(tilt=1, tilt_x=320, tilt_y=260, tilt_scale=75)  # the info page: one plane
 BADGE = dict(width=46, height=23)  # edition 115: RIPPS2's 64 x 32 badges at Adapt's size
@@ -147,10 +151,11 @@ def backdrop(fam):
         block(fam + "0", type="Background", pattern="BG", widecrop=1),
         block(fam + "1", type="Ripps2PanelGlass", aligned=0, x=0, y=0, width=640, height=480,
               blur=1, tint=FROST_TINT, frame=0),
-        block(fam + "2", type="Ripps2PanelGlass", aligned=0, x=bar_x, y=0, width=26, height=480,
-              blur=1, tint=BAR_TINT, tint_color="#01040F", frame=0),
-        block(fam + "3", type="Ripps2PanelGlass", aligned=0, x=rule_x, y=0, width=12, height=480,
-              blur=1, tint=RULE_TINT, tint_color="#28C5F9", frame=0),
+        # edition 115: the side bar is RIPPS2's on every page (sidebar_bar=always), in the style picked (Layout > Sidebar
+        # Style), and it stays through the list <-> info morph; the theme's own strip and rule (2, 3) stand down, kept as
+        # numbers so the elements after them keep theirs
+        block(fam + "2", type="Ripps2PanelGlass", enabled=0),
+        block(fam + "3", type="Ripps2PanelGlass", enabled=0),
     ]
 
 

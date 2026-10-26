@@ -141,6 +141,8 @@ frosted panels), and the drawer opens out of it, frosted on Storage like the bar
 | `sidebar_x`, `sidebar_width` | 0 to 560, 16 to 80 | The bar the glyphs sit in (0, 26). |
 | `sidebar_drawer` | 120 to 400 | The drawer's right edge (216). |
 | `sidebar_bar` | `always` (default), `pages`, `never` | Where RIPPS2 draws the bar: every page, every page but Storage (the theme draws its own there, as Adapt does), or nowhere. |
+| `sidebar_left` | `sidebar` (default), `list` | Build 115: `list` keeps Left / Right and L1 / R1 the list's while the categories are the sidebar (RIPFLOW keeps its covers on them); Circle brings the sidebar out. |
+| `sidebar_hide` | `0` (default), `1` | Build 115: `1` keeps the sidebar out of sight, sliding out when Circle calls it and away when it is done. RIPFLOW sets both. |
 | `sidebar_style` | `split` (default), `one_piece` | Build 115: the glyphs in the dark bar with the accent strip beside it, or one bar of the same overall width with the glyphs in its middle. Layout > Sidebar Style overrides it. |
 | `row_font`, `notice_font` | a font slot, `0` to `15` | Build 115: the slot STATUS's and ACHIEVEMENTS' option names, and every notification, are drawn in. Unset: the Settings rows' Roboto, and the built-in Roboto Condensed Bold. |
 | `sidebar_color`, `sidebar_tint` | `#RRGGBB`, 0 to 128 | The bar's glass (`#01040F`, 88). The drawer's is deeper. |
