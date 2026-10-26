@@ -112,7 +112,8 @@ def main(folder):
                "hints_fade": ("1", "0"), "sidebar_style": ("split", "one_piece"),
                # build 115: RIPPS2's badges, where its busy mark sits
                "badge_set": ("theme", "ripps2"), "loading_mark": ("corner", "center"),
-               "sidebar_left": ("sidebar", "list"), "sidebar_hide": ("0", "1")}  # build 115: RIPFLOW's sidebar
+               "sidebar_left": ("sidebar", "list"), "sidebar_hide": ("0", "1"),  # build 115: RIPFLOW's sidebar
+               "hints_flank": ("0", "1")}  # build 115: OSDSYS-style hints
     for key, values in CHOICES.items():
         if key in glob and glob[key].lower() not in values:
             errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))
@@ -136,6 +137,8 @@ def main(folder):
         if key in glob and not (glob[key].isdigit() and 0 <= int(glob[key]) <= 128):
             errors.append("%s=%s: 0-128" % (key, glob[key]))
     # build 115: the option names on STATUS and ACHIEVEMENTS, and the notifications, in a slot of the theme's own
+    if "hints_flank_gap" in glob and not (glob["hints_flank_gap"].isdigit() and int(glob["hints_flank_gap"]) <= 200):
+        errors.append("hints_flank_gap=%s: 0 to 200 pixels" % glob["hints_flank_gap"])
     for key in ("row_font", "notice_font", "message_font"):  # message_font: build 115
         if key in glob and not (glob[key].isdigit() and 0 <= int(glob[key]) <= 15):
             errors.append("%s=%s: a font slot, 0-15" % (key, glob[key]))
