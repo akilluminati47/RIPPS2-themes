@@ -7,7 +7,8 @@ Checks conf_theme.cfg the way RIPPS2's theme engine reads it (src/themes.c, RIPP
   number); every other family (appsMain, vcdInfo...) replaces its base family's element of the same
   number, so a number past the base family's last is never read;
 - every element type is one the engine knows;
-- every image the theme names (default=, overlay=, bg/attribute folders) and every font exists;
+- every image the theme names (default=, overlay=, bg/attribute folders) and every font exists, or is one of
+  RIPPS2's own (build 115: an image a theme names but does not ship is RIPPS2's of that name, unless use_default=0);
 - RIPPS2 keys are where they work (blur/tint/tint_color/frame on Ripps2PanelGlass, columns/rows/spacing/back_pattern
   on Grid, widecrop on Background) and in range (tint 0-128, tint_color #RRGGBB);
 - a Grid or Coverflow page also declares an ItemsList (hidden=1), else the engine adds a visible one;
@@ -23,7 +24,18 @@ import sys
 
 # fonts compiled into RIPPS2 (src/fntsys.c): a theme names them as builtin:<name> and ships nothing
 BUILTIN_FONTS = {"builtin:ripps2", "builtin:ripps2sleek", "builtin:ripps2sleekbold", "builtin:ripps2sleekcase",
-                 "builtin:ripflow", "builtin:ripflowbold", "builtin:roboto"}  # roboto: build 114, variable (weights)
+                 "builtin:ripflow", "builtin:ripflowbold", "builtin:roboto",  # roboto: build 114, variable (weights)
+                 "builtin:ripps2condensed"}  # build 115: Planet N Condensed (Adapt's list face)
+# RIPPS2's own images (RiptOPL src/textures.c's table): from build 115 a theme may name one it does not ship
+BUILTIN_IMAGES = set("""load0 load1 load2 load3 load4 load5 load6 load7 usb usb_bd ilk_bd m4s_bd hdd_bd mmce hdd eth udp_bd app Index_0 Index_1 Index_2 Index_3 Index_4 left right cross triangle circle square select start L3 R3 fav fav_mark cover disc screen coverapp missing no_Rating screens ELF HDL ISO VCD ZSO UL APP CD DVD Aspect_s Aspect_w Aspect_w1 Aspect_w2 Rating_0 Rating_1 Rating_2 Rating_3 Rating_4 Rating_5 Scan_240p Scan_240p1 Scan_480i Scan_480p Scan_480p1 Scan_480p2 Scan_480p3 Scan_480p4 Scan_480p5 Scan_576i Scan_576p Scan_720p Scan_1080i Scan_1080i2 Scan_1080p Vmode_multi Vmode_ntsc Vmode_pal logo logo0 logo1 logo2 logo3 logo4 logo5 logo6 case apps_case PS1 PS2 case_overlay udp_fs L1 R1 ripps2_glass ripps2_mark ripps2_mark_glow L2R2 ripps2_ps1logo ripps2_ps2logo ripps2_grid_icons ripps2_up ripps2_down hint_badge launch_disc ripps2_sidebar_icons Players_1 Players_2 Players_3 Players_4 Parental_3 Parental_10 Parental_17 Parental_18 Parental_e Parental_teen psbbn_bg ra_mark""".split())
+
+
+def builtin_image(name):
+    """RIPPS2 has this image: by its own name, or as a badge folder names it (rating/0_Rating is Rating_0)"""
+    if name in BUILTIN_IMAGES:
+        return True
+    m = re.match(r"^[^/]+/(.+)_([A-Za-z]+)$", name)
+    return bool(m) and ("%s_%s" % (m.group(2), m.group(1))) in BUILTIN_IMAGES
 
 TYPES = {"AttributeText", "StaticText", "AttributeImage", "GameImage", "StaticImage", "Background", "MenuIcon",
          "MenuText", "ItemsList", "ItemIcon", "ItemCover", "ItemText", "HintText", "InfoHintText", "LoadingIcon",
@@ -69,7 +81,9 @@ def main(folder):
     glob, elems = parse(cfg)
 
     def img(name):
-        return any(os.path.isfile(os.path.join(folder, name + ext)) for ext in (".png", ".jpg", ""))
+        if any(os.path.isfile(os.path.join(folder, name + ext)) for ext in (".png", ".jpg", "")):
+            return True
+        return glob.get("use_default", "1") != "0" and builtin_image(name)  # build 115
 
     for k, v in glob.items():
         if (k == "default_font" or re.match(r"font\d+$", k)) and v.startswith("builtin:"):
@@ -80,22 +94,38 @@ def main(folder):
             errors.append("font %s=%s is missing" % (k, v))
     # Colors and More from the theme (build 81; source_name=pop since 80): each must be a value RIPPS2 knows
     CHOICES = {"source_name": ("pop", "shown", "fade", "hidden"), "category_bar": ("shown", "fade", "hidden"),
-               "button_hints": ("shown", "fade", "hidden"), "dpad_glyphs": ("hidden", "shown", "fade_in", "fade_out"),
+               "button_hints": ("shown", "fade", "hidden"),
+               "dpad_glyphs": ("hidden", "shown", "fade_in", "fade_out", "guidance"),  # build 115: guidance
                "category_order": ("launch_disc_first", "memory_files_first"),
-               "color_theme": ("ripps2", "ember", "blood", "ectoplasm", "amethyst", "bone"),
+               "color_theme": ("ripps2", "ember", "blood", "ectoplasm", "amethyst", "bone",
+                               "tangerine", "flamingo", "turquoise", "moonlight"),  # build 114's four
                # build 90: hints and glyphs; 91: the launch disc; 92: the category bar; 96: page buttons
                "hints_labels": ("1", "0", "badge"), "hints_layout": ("row", "column"),
                "glyph_set": ("theme", "ripps2", "standard", "white"), "launch_disc": ("pop", "spin"),
-               "category_font": ("ripps2", "theme"), "category_layout": ("row", "column", "sidebar"),
+               "category_font": ("ripps2", "theme"),
+               "category_layout": ("row", "column", "sidebar", "menu"),  # build 115: menu; unset is menu too
                "category_transition": ("none", "fade", "flash"), "page_buttons": ("l2r2", "l1r1"),
                "bg_blur": ("off", "weak", "normal", "strong"),  # build 98
                # build 113: the categories a theme shows and the sidebar's bar
-               "categories": ("three", "storage"), "sidebar_bar": ("always", "pages", "never")}
+               "categories": ("three", "storage"), "sidebar_bar": ("always", "pages", "never"),
+               # build 115: the hint glyphs' fade-in, the sidebar's style
+               "hints_fade": ("1", "0"), "sidebar_style": ("split", "one_piece"),
+               # build 115: RIPPS2's badges, where its busy mark sits
+               "badge_set": ("theme", "ripps2"), "loading_mark": ("corner", "center")}
     for key, values in CHOICES.items():
         if key in glob and glob[key].lower() not in values:
             errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))
-    # build 113: the sidebar's place, its glass and its accent strip
-    for key, lo, hi in (("sidebar_x", 0, 600), ("sidebar_width", 14, 80), ("sidebar_drawer", 80, 600)):
+    # build 115: category_layout alone says where the categories go; build 113's categories= still reads, but only
+    # where category_layout is not set, and a theme that says neither shows them in the START menu
+    if "categories" in glob:
+        warnings.append("categories=%s: build 115 reads category_layout (row, sidebar or menu); %s" % (
+            glob["categories"], "drop categories=" if "category_layout" in glob else
+            "say category_layout=%s instead" % ("row" if glob["categories"].lower() == "three" else "menu")))
+    elif "category_layout" not in glob:
+        warnings.append("no category_layout: RIPPS2 shows the categories in the START menu (menu); say row or sidebar "
+                        "for the bar")
+    # build 113: the sidebar's place, its glass and its accent strip (the engine's own ranges)
+    for key, lo, hi in (("sidebar_x", 0, 560), ("sidebar_width", 16, 80), ("sidebar_drawer", 120, 400)):
         if key in glob and not (glob[key].isdigit() and lo <= int(glob[key]) <= hi):
             errors.append("%s=%s: %d to %d pixels" % (key, glob[key], lo, hi))
     for key in ("sidebar_color", "sidebar_accent_color"):
@@ -104,6 +134,10 @@ def main(folder):
     for key in ("sidebar_tint", "sidebar_accent_tint"):
         if key in glob and not (glob[key].isdigit() and 0 <= int(glob[key]) <= 128):
             errors.append("%s=%s: 0-128" % (key, glob[key]))
+    # build 115: the option names on STATUS and ACHIEVEMENTS, and the notifications, in a slot of the theme's own
+    for key in ("row_font", "notice_font", "message_font"):  # message_font: build 115
+        if key in glob and not (glob[key].isdigit() and 0 <= int(glob[key]) <= 15):
+            errors.append("%s=%s: a font slot, 0-15" % (key, glob[key]))
     if glob.get("use_settings_bg") == "1" and not img("settings_bg"):
         errors.append("use_settings_bg=1 but settings_bg.png is missing")
 

@@ -1,6 +1,6 @@
-# What a RIPPS2 theme can do (build 102)
+# What a RIPPS2 theme can do (build 115)
 
-*Updated 10/17/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
+*Updated 10/26/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
 to sit at the top of a `conf_theme.cfg`, as they do in Adapt and Adapt Rx. RIPGRID and RIPFLOW are built into RIPPS2.*
 
 A RIPPS2 theme is a folder, `THM/thm_<Name>/`, on any drive RIPPS2 reads (USB, HDD, MMCE, a memory
@@ -27,6 +27,7 @@ key it does not know, so a theme stays usable on it.
 | `conf_theme.cfg` | The layout and the keys below. Plain `key=value`; element blocks are `main0:` and indented keys. |
 | `*.png` | Images. **8-bit palette PNGs**: RIPPS2 keeps those as 8-bit textures with a 32-bit palette (alpha included), a quarter of the VRAM of RGBA and quicker to load. `tools/png8.py` converts. 640x480 for full-screen pieces. |
 | `*.ttf` | Fonts, named in the font keys. |
+| *(nothing else)* | Build 115: a theme can be `conf_theme.cfg` alone, or with its own pictures. An image it names but leaves out is RIPPS2's own of that name (see [a theme of two files](#a-theme-of-two-files-build-115)). Adapt and Adapt Rx are `conf_theme.cfg` and `SCR43.png`. |
 | `sound/*.adp` | The theme's sounds, by event (see [sounds](#sounds-and-music)). |
 | `sound/bgm.ogg` | The theme's music. |
 | `<name>.png` | Any of RIPPS2's own images, replaced by name (see [replacing](#replacing-ripps2s-own-images)). |
@@ -51,7 +52,10 @@ screenshots).
 | `bg_blur` | `off`, `weak`, `normal`, `strong` (default strong) | 98 | How hard frosted glass (`Ripps2PanelGlass` with `blur=1`) blurs the game's art: the blurred copy is laid over the sharp art at 0, 33, 66 or 100 %. A theme default: Artwork settings > Background Blur overrides it. RIPGRID and Adapt use `weak`. |
 | `source_name` | `pop`, `shown`, `fade`, `hidden` | 80 / 81 | How the source's name (ALL GAMES, HDD GAMES...) appears. `pop` (build 81): not drawn over the list, it plays as a toast in the middle of the page, the whole name in big capitals, on the first list after boot, on a source change and on coming back to Storage, then fades. `shown` / `fade` (with the category bar's idle fade) / `hidden` (build 81). A theme default: [the user wins](#colors-and-more-from-the-theme-build-81). |
 | `use_settings_bg` | `0` / `1` | OPL | `1` + `settings_bg.png`: Settings over that picture. Leave it out for the pillars behind RIPPS2's glass page panel. |
-| `use_default` | `0` / `1` (default 1) | OPL | `0`: an image the theme does not ship stays empty instead of falling back to RIPPS2's own. |
+| `use_default` | `0` / `1` (default 1) | OPL | `0`: an image the theme does not ship stays empty instead of falling back to RIPPS2's own (build 115: images named in `default=` and `overlay=` too). |
+| `badge_set` | `theme` (default), `ripps2` | 115 | `ripps2`: the info page's badges are RIPPS2's own (RIPFLOW's set, with Players and the ESRB ratings added), so the theme ships no badge folders. Hints and Glyphs > Badge Set overrides it on any theme. |
+| `loading_mark` | `corner`, `center` (default: the `LoadingIcon` element's place) | 115 | Where RIPPS2's busy mark (the PS2 logo) sits: the bottom-right corner (544, 426) or centred over the hints (320, 426). The theme's `load0`...`load7` are not drawn. |
+| `message_font` | a font slot, `0` to `15` | 115 | Every message box and wait screen. Unset: the built-in Roboto Condensed at 400, in the text's own case (Text Weight does not change it). |
 | `coverflow_cover_offset` | pixels | RiptOPL | Coverflow's cover offset (see the engine reference). |
 
 ## Colors and More from the theme (build 81)
@@ -62,10 +66,11 @@ made:
 
 | Key | Values | The Colors and More row |
 |---|---|---|
-| `color_theme` | `ripps2`, `ember`, `blood`, `ectoplasm`, `amethyst`, `bone` | Color Theme: one colour matrix over everything RIPPS2 draws itself (towers, orbs, glass, its pages). Greys and art never change, only the blues move. |
+| `color_theme` | `ripps2`, `ember`, `blood`, `ectoplasm`, `amethyst`, `bone`, and from build 114 `tangerine`, `flamingo`, `turquoise`, `moonlight` | Color Theme: one colour matrix over everything RIPPS2 draws itself (towers, orbs, glass, its pages). Greys and art never change, only the blues move. |
 | `category_bar` | `shown`, `fade`, `hidden` | LAUNCH DISC, STORAGE, MEMORY FILES along the top. `fade`: fades after 6 s idle, back on a press. |
 | `button_hints` | `shown`, `fade`, `hidden` | The button hints along the bottom of the three tabs. |
-| `dpad_glyphs` | `hidden`, `shown`, `fade_in`, `fade_out` | The D-pad glyphs beside a drive's name. |
+| `dpad_glyphs` | `hidden`, `shown`, `fade_in`, `fade_out`, `guidance` | The D-pad glyphs beside a drive's name. Build 115: `guidance` brings them in after 4.2 s with no press (and, on RIPFLOW in sidebar mode, L1/R1 beside the centre cover). |
+| `hints_fade` | `1` (default), `0` | Build 115: a hint glyph that changes fades in, as the covers do; one that stays is left alone. Settings > Interface > Layout > Hints and Glyphs Fade overrides it. |
 | `category_order` | `launch_disc_first`, `memory_files_first` | Which end of the bar Memory Files sits. RIPFLOW uses `memory_files_first`. |
 | `source_name` | `pop`, `shown`, `fade`, `hidden` | Source Name (above). |
 | `page_buttons` | `l2r2`, `l1r1` (default: none) | Build 96: which shoulder buttons turn the game list's pages. `l2r2`: L2 / R2 turn pages and L1 / R1 switch categories; `l1r1` the other way round. Without it L2 goes to the top and R2 to the end. Controller Settings > Page Buttons overrides it. RIPGRID uses `l2r2`. |
@@ -108,12 +113,23 @@ everywhere. A theme can change that, move them, and reword them:
 | Key | Values | What it does |
 |---|---|---|
 | `category_font` | `ripps2` (default), `theme` | `theme`: the bar uses the theme's font2 (the current category) and font7 (the others). |
-| `category_layout` | `row` (default), `sidebar` | `sidebar` (build 113): the three as glyphs down a bar on the left; Left on a list (the cancel button on Launch Disc and Memory Files) focuses them, Up / Down opens each one's drawer with its name first (Storage's lists the sources), Cross enters it and Cross on an item goes there. No page titles. Colors and More > Category Layout overrides it. `column` means `sidebar` from build 113 (before it, a column of words). |
-| `categories` | `three`, `storage` | Build 113. `three`: Launch Disc, Storage and Memory Files. `storage`: Storage alone, Launch Disc and Memory Files in the START menu (backing out of either returns to Storage), L1 / R1 turn the list's pages. Unset, a theme that uses any of RIPPS2's keys gets `three` and one made for OPL gets `storage`. |
+| `category_layout` | `row`, `sidebar`, `menu` (default) | Build 115: the one key for where the three categories go, and **a theme must say `row` or `sidebar` to have them**. `row`: their names across the top. `sidebar` (build 113): glyphs down a bar on the left; Left on a list (the cancel button on Launch Disc and Memory Files) focuses them, Up / Down opens each one's drawer with its name first (Storage's lists the sources), Cross enters it and Cross on an item goes there; no page titles. `menu` (or no key, as a theme made for OPL): no bar, Storage alone, Launch Disc and Memory Files in the START menu (backing out of either returns to Storage), L1 / R1 turn the list's pages. Layout > Category Layout overrides it. `column` means `sidebar`. Build 113's `categories=three` / `storage` still reads as `row` / `menu` where `category_layout` is not set. |
 | `category_x`, `category_y` | 0 to 640, 0 to 480 | A column's left edge and first line (40, 140). In a row, `category_y` moves the bar down (30). |
 | `category_spacing` | 12 to 120 | A column's line pitch (34). |
 | `category_label_launch`, `category_label_storage`, `category_label_files` | text | The words on the bar (RIPPS2's if not set). |
 | `category_transition` | `none`, `fade`, `flash` | How a new page comes in as the category changes: from the theme's `bg_color`, or out of a flash. Colors and More > Page Transition overrides it. |
+
+### Where the row and the sidebar sit (measurements)
+
+Lay a theme out around these, in the 640 x 480 space:
+
+| | Row (`category_layout=row`) | Sidebar (`category_layout=sidebar`) |
+|---|---|---|
+| Where | Across the top | Down the left edge, the whole height |
+| Pieces | The three names centred at x **128, 320, 512** (192 apart), on **y 30** (`category_y` moves the line); the PS2 mark under the lit one at **y 53**, 96 x 20 | The bar at `sidebar_x` (**0**), `sidebar_width` wide (**26**), its accent strip **14** more; three glyphs, `sidebar_width` - 8 square (**18**; 14 to 28), centred in the bar, the middle one at **y 240**, a glyph and **22** px apart |
+| Room a name gets | **184** px; a wider name (FICHIERS MÉMOIRE) is drawn at 15, 13 or 12 px | The drawer, out to `sidebar_drawer` (**216**), **26** px rows |
+| Keep the theme's own content | Below **y 70** (Adapt's glass starts at 76) | Right of **x 40** (`sidebar_x` + `sidebar_width` + 14) |
+| Moves with | `category_y`, `category_font`, `category_label_*` | `sidebar_x`, `sidebar_width`, `sidebar_drawer`, `sidebar_style` |
 
 ### The sidebar's bar (build 113)
 
@@ -122,9 +138,11 @@ frosted panels), and the drawer opens out of it, frosted on Storage like the bar
 
 | Key | Values | What it does |
 |---|---|---|
-| `sidebar_x`, `sidebar_width` | 0 to 600, 14 to 80 | The bar the glyphs sit in (0, 26). |
-| `sidebar_drawer` | 80 to 600 | The drawer's right edge (216). |
+| `sidebar_x`, `sidebar_width` | 0 to 560, 16 to 80 | The bar the glyphs sit in (0, 26). |
+| `sidebar_drawer` | 120 to 400 | The drawer's right edge (216). |
 | `sidebar_bar` | `always` (default), `pages`, `never` | Where RIPPS2 draws the bar: every page, every page but Storage (the theme draws its own there, as Adapt does), or nowhere. |
+| `sidebar_style` | `split` (default), `one_piece` | Build 115: the glyphs in the dark bar with the accent strip beside it, or one bar of the same overall width with the glyphs in its middle. Layout > Sidebar Style overrides it. |
+| `row_font`, `notice_font` | a font slot, `0` to `15` | Build 115: the slot STATUS's and ACHIEVEMENTS' option names, and every notification, are drawn in. Unset: the Settings rows' Roboto, and the built-in Roboto Condensed Bold. |
 | `sidebar_color`, `sidebar_tint` | `#RRGGBB`, 0 to 128 | The bar's glass (`#01040F`, 88). The drawer's is deeper. |
 | `sidebar_accent_color`, `sidebar_accent_tint` | `#RRGGBB`, 0 to 128 | The strip beside the bar (`#28C5F9`, 22); tint 0 draws none. |
 
@@ -162,6 +180,7 @@ or one of RIPPS2's built-in faces:
 | `builtin:ripflow` | Roboto Condensed (RIPFLOW's text; from build 114 the variable Roboto at 400) |
 | `builtin:ripflowbold` | Roboto Bold Condensed (RIPFLOW's menus; from build 114 the variable Roboto at 700) |
 | `builtin:roboto` | build 114: Roboto Condensed 3.015, variable, drawn at the slot's `font<N>_weight` |
+| `builtin:ripps2condensed` | build 115: Planet N Condensed (Iconian Fonts), Adapt's list face |
 
 **`font1_weight` ... `font15_weight`** (and `default_font_weight`), build 114: the weight a slot is drawn at, 100 to 900.
 `builtin:roboto` is variable from 400 to 700; any other face is grown to the weight asked. Adapt and Adapt Rx (edition
@@ -280,6 +299,24 @@ without one.
 - **Left / right variants**: `tools/mirror_theme.py` drafts the other side; the Adapt family keeps its
   side bar left and swaps the content (`tools/gen_adapt_family.py`).
 
+## A theme of two files (build 115)
+
+A theme names its pictures (`default=`, `overlay=`, `overlay2=`, an `AttributeImage`'s badge folder); from build 115
+any it leaves out of its folder is RIPPS2's own of that name, unless `use_default=0`. A badge folder's name reads as
+RIPPS2's (`rating/0_Rating` is `Rating_0`). With the built-in fonts, `glyph_set`, `badge_set` and `loading_mark`, a
+theme can be `conf_theme.cfg` alone, plus whatever pictures make it its own. Adapt and Adapt Rx (edition 115) are
+`conf_theme.cfg` and `SCR43.png`:
+
+| Was a file | Now |
+|---|---|
+| `a.ttf` | `default_font=builtin:ripps2condensed` |
+| `case.png`, `case_overlay.png` | RIPPS2's own (RiptOPL's case, the same pictures) |
+| `cross.png` ... `right.png` | `glyph_set=standard` (RIPPS2 carries the set) |
+| `load0.png` ... `load7.png` | `loading_mark=corner` (RIPPS2's busy mark; the frames were never drawn) |
+| `aspect/`, `esrb/`, `players/`, `rating/`, `scan/`, `vmode/` | `badge_set=ripps2` |
+
+A theme that keeps its own pictures loses nothing: a file in the folder always wins.
+
 ## Replacing RIPPS2's own images
 
 Any of these, shipped in the theme folder as `<name>.png`, replaces RIPPS2's own (8-bit palette, alpha
@@ -289,9 +326,9 @@ kept). Leave one out and RIPPS2 uses its own, unless `use_default=0`.
 |---|---|
 | Launch disc | `launch_disc` (build 91: the disc `launch_disc=pop|spin` brings in when a game has no ICO art; square, round, transparent outside) |
 | Button glyphs | `cross` `circle` `square` `triangle` `select` `start` `L1` `R1` `L3` `R3` `L2R2` `left` `right` `ripps2_up` `ripps2_down` `hint_badge` (build 90: the pill for `hints_labels=badge`; make it 40 x 28 or so with a flat middle) |
-| Loading | `load0` ... `load7` |
+| Loading | `load0` ... `load7` (not drawn: RIPPS2's busy mark is, placed by `loading_mark`) |
 | Devices | `usb` `usb_bd` `ilk_bd` `m4s_bd` `hdd_bd` `hdd` `mmce` `eth` `udp_bd` `udp_fs` `app` `Index_0` ... `Index_4` `no_Device` `Device_1` ... `Device_6` `Device_all` |
-| Badges | `ELF` `HDL` `ISO` `VCD` `ZSO` `UL` `APP` `CD` `DVD` `PS1` `PS2` `Aspect_s` `Aspect_w` `Aspect_w1` `Aspect_w2` `Rating_0` ... `Rating_5` `no_Rating` `Scan_240p` `Scan_240p1` `Scan_480i` `Scan_480p` ... `Scan_480p5` `Scan_576i` `Scan_576p` `Scan_720p` `Scan_1080i` `Scan_1080i2` `Scan_1080p` `Vmode_multi` `Vmode_ntsc` `Vmode_pal` |
+| Badges | `ELF` `HDL` `ISO` `VCD` `ZSO` `UL` `APP` `CD` `DVD` `PS1` `PS2` `Aspect_s` `Aspect_w` `Aspect_w1` `Aspect_w2` `Rating_0` ... `Rating_5` `no_Rating` `Scan_240p` `Scan_240p1` `Scan_480i` `Scan_480p` ... `Scan_480p5` `Scan_576i` `Scan_576p` `Scan_720p` `Scan_1080i` `Scan_1080i2` `Scan_1080p` `Vmode_multi` `Vmode_ntsc` `Vmode_pal`; build 115: `Players_1` ... `Players_4` `Parental_3` `Parental_10` `Parental_17` `Parental_18` `Parental_e` `Parental_teen` |
 | Art stand-ins | `cover` `disc` `screen` `screens` `coverapp` `missing` `case` `case_overlay` `apps_case` `logo` `logo0` ... `logo6` `fav` `fav_mark` `settings_bg` |
 | RIPPS2's marks | `ripps2_mark` (the PS2 mark that flies along the category bar) `ripps2_mark_glow` `ripps2_glass` `ripps2_ps1logo` `ripps2_ps2logo` (L3's view word) `ripps2_grid_icons` `ra_mark` |
 
@@ -331,8 +368,9 @@ is loaded into the SPU2's 2 MB at once (music streams), so keep the set small.
 
 ## What every theme gets
 - Art fades in as it arrives; covers on a Grid ease in once per game.
-- Hold **SELECT 4.2 seconds** on the game list to step to the next theme (build 79), once per hold, and
-  it is saved; a shorter press refreshes the list.
+- Hold **SELECT** on the game list for the themes (build 114's list): from 1 s the THEMES window comes up with a
+  wheel filling, and at 4.2 s the themes fill it (build 115). Let go before and it fades away and the list refreshes,
+  as a short press does. Settings > Interface > Hold SELECT: Cycle steps to the next theme instead (build 79's).
 - L3's view word and the Pop In toast in RIPPS2 Sleek Bold 64 (build 81), the same on every theme, and the category bar's flying mark.
 - Colors and More, with the theme's own defaults where it gives them.
 - Hints and Glyphs (build 90): the user can hide, reorder or relabel the hints and pick a glyph set on any theme.
@@ -340,6 +378,8 @@ is loaded into the SPU2's 2 MB at once (music streams), so keep the set small.
 - Build 102: the Colours page edits the theme's own colours too (kept for that theme; Reset gives back its
   file's), an app's case is a PS1 square unless its menu (Triangle > Case Shape) says PS2 or Theme, a
   reflection fades with its cover, long text slides smoothly, and About and STATUS read in RIPPS2's own faces.
+- Build 115: a PS1 game's cover in the square PS1 case, every message in Roboto at normal weight, the towers in the
+  Color Theme (or the Color Sweep) from the first boot frame, and Hints and Glyphs > Badge Set.
 
 ## What a theme cannot change (yet)
 These are RIPPS2's own and need an engine change (`elf/patches` in RIPPS2), not a theme: the towers'

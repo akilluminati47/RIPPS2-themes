@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/23/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 114          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/26/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 115          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -31,11 +31,12 @@ HEAD = RULE + """
 # Theme Name: {name}
 # Made by: akilluminati47
 # Created: 8/27/2026 (Adapt, for RiptOPL)
-# Updated: {date} (the RIPPS2 edition, made on RIPPS2 build {build}; needs RIPPS2 build 80 or later)
-# Credits: [case.png] [case_overlay.png] RiptOPL's built-in case (b2); [SCR43.png] Adapt's screenshot frame
-#   cut to 4:3; the font a.ttf and the other images as shipped in Adapt RiptOPL. Adapt's Roboto Condensed and
-#   Planet N Compact (b.ttf, c.ttf, d.ttf) are RIPPS2's built-in fonts since build 114: builtin:roboto at 700 and
-#   400, and builtin:ripps2.
+# Updated: {date} (the RIPPS2 edition, made on RIPPS2 build {build}; needs RIPPS2 build 115 or later)
+# Files: this one and SCR43.png (Adapt's screenshot frame cut to 4:3). Everything else is RIPPS2's own from build
+#   115: the case (case, case_overlay: RiptOPL's), the glyphs (glyph_set=standard), the badges (badge_set=ripps2),
+#   the busy mark (loading_mark=corner) and Adapt's fonts, Planet N Condensed by Iconian Fonts
+#   (builtin:ripps2condensed, its a.ttf), Roboto Condensed (builtin:roboto at 700 and 400) and Planet N Compact
+#   (builtin:ripps2). An edition before 115 shipped those as files.
 # Look: each game's art under frosted glass (a full-screen Ripps2PanelGlass, blur=1), a frosted side bar on
 #   the left, clear glass panels under the text, page morphs between the list and the info page, the pillars
 #   behind Settings (no settings_bg), right-stick tilt on the art. Art eases in; no stock disc or case.
@@ -59,10 +60,18 @@ glyph_set=standard
 sounds=audio
 # RIPPS2 build 113: the three categories, as the sidebar: their glyphs in the frosted bar on the left, a drawer
 # opening out of it for each (Left on the list); RIPPS2 draws the bar on Launch Disc and Memory Files, this theme's
-# main2 / main3 are the bar on Storage
-categories=three
+# main2 / main3 are the bar on Storage. Build 115: category_layout alone says it (a theme that says neither row nor
+# sidebar gets the categories in the START menu, as a theme made for OPL)
 category_layout=sidebar
 sidebar_bar=pages
+# RIPPS2 build 115: a hint glyph that changes fades in, as the covers do (on is RIPPS2's default; said here so the key
+# is in front of anyone making a theme from this one), and the sidebar as Adapt draws it: the dark bar and its strip
+hints_fade=1
+sidebar_style=split
+# RIPPS2 build 115: RIPPS2's own badges (RIPFLOW's set, with Players and the ESRB ratings), and its busy mark in the
+# corner, so the theme ships no badge folders and no loading frames
+badge_set=ripps2
+loading_mark=corner
 {fonts}"""
 
 SIDES = {
@@ -70,12 +79,14 @@ SIDES = {
     1: "Adapt Rx: the list left, the case and disc right, under LAUNCH DISC; the info page's text left.",
 }
 
-# Adapt's own type. Edition 114 (the font audit): a.ttf ships in the theme; Roboto Condensed Bold and Regular (b.ttf,
-# c.ttf) are RIPPS2's built-in variable Roboto at 700 and 400, Planet N Compact (d.ttf) its built-in menu face.
+# Adapt's own type. Edition 114 (the font audit): Roboto Condensed Bold and Regular (b.ttf, c.ttf) are RIPPS2's built-in
+# variable Roboto at 700 and 400, Planet N Compact (d.ttf) its built-in menu face. Edition 115: Planet N Condensed (a.ttf)
+# is built in too (builtin:ripps2condensed), so the theme ships no font.
 # The fonts RIPPS2 carries, for any theme: builtin:ripps2 (Planet N Compact, the menus), builtin:ripps2sleek,
 # builtin:ripps2sleekbold, builtin:ripps2sleekcase (RIPPS2 Sleek: hints, bold, typed text), builtin:roboto (Roboto
-# Condensed 3.015, variable: font<N>_weight 400 to 700), builtin:ripflow (it at 400) and builtin:ripflowbold (at 700).
-ADAPT_FONTS = """default_font=a.ttf
+# Condensed 3.015, variable: font<N>_weight 400 to 700), builtin:ripflow (it at 400), builtin:ripflowbold (at 700) and
+# builtin:ripps2condensed (Planet N Condensed, build 115).
+ADAPT_FONTS = """default_font=builtin:ripps2condensed
 default_font_size=17
 font1=builtin:roboto
 font1_weight=700
@@ -92,6 +103,7 @@ font15_size=15
 # pages) as on RIPPS2's other themes; Adapt's own faces were hard to read that small
 FROST_TINT, PANEL_TINT, BAR_TINT, RULE_TINT = 24, 44, 88, 22
 INFO_TILT = dict(tilt=1, tilt_x=320, tilt_y=260, tilt_scale=75)  # the info page: one plane
+BADGE = dict(width=46, height=23)  # edition 115: RIPPS2's 64 x 32 badges at Adapt's size
 
 
 def case(w=143, h=201, **kv):
@@ -168,9 +180,12 @@ def info(rx):
         # however much clear space its image has round it
         block("info5", type="GameImage", pattern="LGO", x="POS_MID", y=95, aligned=1, width=300,
               height=125, valign="bottom", **INFO_TILT),
-        block("info6", type="AttributeImage", attribute="Rating", default="rating/0_Rating", aligned=0, x=ax, y=177, **INFO_TILT),
-        block("info7", type="AttributeImage", attribute="Scan", aligned=0, x=ax + 172, y=173, **INFO_TILT),
-        block("info8", type="AttributeImage", attribute="Players", aligned=0, x=ax + 122, y=173, **INFO_TILT),
+        # edition 115: RIPPS2's badges (badge_set=ripps2), 64 x 32 drawn at 46 x 23 on Adapt's 50 px pitch, the stars
+        # (256 x 32) at 112 x 14; default= names RIPPS2's own no-stars picture
+        block("info6", type="AttributeImage", attribute="Rating", default="Rating_0", aligned=0, x=ax, y=181,
+              width=112, height=14, **INFO_TILT),
+        block("info7", type="AttributeImage", attribute="Scan", aligned=0, x=ax + 172, y=176, **BADGE, **INFO_TILT),
+        block("info8", type="AttributeImage", attribute="Players", aligned=0, x=ax + 122, y=176, **BADGE, **INFO_TILT),
         # line_height: a description longer than its box rolls through it instead of running on
         block("info9", type="AttributeText", attribute="Description", aligned=0, display=2, x=tx, y=210,
               width=tw, height=100, wrap=1, line_height=19, font=1, **INFO_TILT),
@@ -186,8 +201,8 @@ def info(rx):
         screenshot("info15", "SCRn", sx, 355),
         # the badge (54 px) 16 px inside the panel's right edge, whichever width the panel is
         block("info16", type="AttributeImage", attribute="Parental", aligned=0, scaled=1, x=gx + gw - 70, y=330, **INFO_TILT),
-        block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=173, **INFO_TILT),
-        block("info18", type="AttributeImage", attribute="Aspect", aligned=0, x=ax + 222, y=173, **INFO_TILT),
+        block("info17", type="AttributeImage", attribute="Vmode", aligned=0, x=ax + 272, y=176, **BADGE, **INFO_TILT),
+        block("info18", type="AttributeImage", attribute="Aspect", aligned=0, x=ax + 222, y=176, **BADGE, **INFO_TILT),
     ]
     # apps: the app's case in the screenshots' place (build 102: a PS1 square, centred on the glass), no screenshots
     apps = [
