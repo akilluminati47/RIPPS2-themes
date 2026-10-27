@@ -1,4 +1,4 @@
-# What a RIPPS2 theme can do (build 115)
+# What a RIPPS2 theme can do (build 117)
 
 *Updated 10/26/2026. Every key below, one line each, is in [key_glossary.cfg](key_glossary.cfg): `#` comments ready
 to sit at the top of a `conf_theme.cfg`, as they do in Adapt and Adapt Rx. RIPGRID and RIPFLOW are built into RIPPS2.*
@@ -145,6 +145,9 @@ frosted panels), and the drawer opens out of it, frosted on Storage like the bar
 | `sidebar_left` | `sidebar` (default), `list` | Build 115: `list` keeps Left / Right and L1 / R1 the list's while the categories are the sidebar (RIPFLOW keeps its covers on them); Circle brings the sidebar out. |
 | `sidebar_hide` | `0` (default), `1` | Build 115: `1` keeps the sidebar out of sight, sliding out when Circle calls it and away when it is done. RIPFLOW sets both. |
 | `sidebar_style` | `split` (default), `one_piece` | Build 115: the glyphs in the dark bar with the accent strip beside it, or one bar of the same overall width with the glyphs in its middle. Layout > Sidebar Style overrides it. |
+| `flowtilt` | `0` (default), `1` | Build 117, the newest key: on a coverflow theme with the categories as the sidebar, Up / Down (and the left stick) tip the centre case back and forth instead of changing the source; the sources are the sidebar's (Circle). RIPFLOW sets it. |
+
+Build 117: with the categories as the sidebar, every theme's keys are alike, a theme made for OPL included (Layout > Category Layout > Sidebar). Circle opens the sidebar on every page, and Left on a list; Right steps no source. L1 / R1 are the theme's own: a list's pages as OPL turns them (unless `page_buttons=l2r2` gives the pages to L2 / R2), RIPFLOW's covers. RIPFLOW and RIPGRID walk their covers on Left / Right, round their ends, and never open the sidebar with Left. Launch Disc and the info page leave L1 / R1 alone; Memory Files turns its orbs with them. The RIPDISC and theme boxes start flush with the sidebar's bar, and the sidebar is drawn over everything on the page.
 | `row_font`, `notice_font` | a font slot, `0` to `15` | Build 115: the slot STATUS's and ACHIEVEMENTS' option names, and every notification, are drawn in. Unset: the Settings rows' Roboto, and the built-in Roboto Condensed Bold. |
 | `sidebar_color`, `sidebar_tint` | `#RRGGBB`, 0 to 128 | The bar's glass (`#01040F`, 88). The drawer's is deeper. |
 | `sidebar_accent_color`, `sidebar_accent_tint` | `#RRGGBB`, 0 to 128 | The strip beside the bar (`#28C5F9`, 22); tint 0 draws none. |

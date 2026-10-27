@@ -113,7 +113,8 @@ def main(folder):
                # build 115: RIPPS2's badges, where its busy mark sits
                "badge_set": ("theme", "ripps2"), "loading_mark": ("corner", "center"),
                "sidebar_left": ("sidebar", "list"), "sidebar_hide": ("0", "1"),  # build 115: RIPFLOW's sidebar
-               "hints_flank": ("0", "1")}  # build 115: OSDSYS-style hints
+               "hints_flank": ("0", "1"),  # build 115: OSDSYS-style hints
+               "flowtilt": ("0", "1")}  # build 117: RIPFLOW's case tilt on Up / Down
     for key, values in CHOICES.items():
         if key in glob and glob[key].lower() not in values:
             errors.append("%s=%s: one of %s" % (key, glob[key], ", ".join(values)))
