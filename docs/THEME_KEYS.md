@@ -171,7 +171,7 @@ From build 97 Right on a row's last cover turns to the next page (Left on its fi
 
 | Key | Values | What it does |
 |---|---|---|
-| `launch_disc` | `pop`, `spin` (default: none) | As a game launches, its disc comes in over the middle of the screen: the game's ICO art, else `launch_disc.png` (yours, or RIPPS2's disc). `pop` settles in like the L3 logos and fades; `spin` settles in, then turns faster and faster and never fades. The user can override it in Flow and Grid > Launch Disc. RIPGRID uses `pop`, RIPFLOW `spin`. |
+| `launch_disc` | `pop`, `spin`, `zoom`, `off` (default: `pop` from RIPPS2 build 122, none before) | As a game launches, its disc comes in over the middle of the screen: the game's ICO art, else `launch_disc.png` (yours, or RIPPS2's disc). `pop` settles in like the L3 logos and fades; `spin` settles in, then turns faster and faster and never fades; `zoom` (build 122) settles in, then grows smoothly to read clearly and stays. The user can override it in Flow and Grid > Launch Disc. RIPGRID and the default theme use `spin`, RIPFLOW, Adapt and Adapt Rx `zoom`. |
 
 ## Fonts
 
@@ -331,7 +331,7 @@ kept). Leave one out and RIPPS2 uses its own, unless `use_default=0`.
 
 | Group | Names |
 |---|---|
-| Launch disc | `launch_disc` (build 91: the disc `launch_disc=pop|spin` brings in when a game has no ICO art; square, round, transparent outside) |
+| Launch disc | `launch_disc` (build 91: the disc `launch_disc=pop|spin|zoom` brings in when a game has no ICO art; square, round, transparent outside) |
 | Button glyphs | `cross` `circle` `square` `triangle` `select` `start` `L1` `R1` `L3` `R3` `L2R2` `left` `right` `ripps2_up` `ripps2_down` `hint_badge` (build 90: the pill for `hints_labels=badge`; make it 40 x 28 or so with a flat middle) |
 | Loading | `load0` ... `load7` (not drawn: RIPPS2's busy mark is, placed by `loading_mark`) |
 | Devices | `usb` `usb_bd` `ilk_bd` `m4s_bd` `hdd_bd` `hdd` `mmce` `eth` `udp_bd` `udp_fs` `app` `Index_0` ... `Index_4` `no_Device` `Device_1` ... `Device_6` `Device_all` |

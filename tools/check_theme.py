@@ -101,7 +101,7 @@ def main(folder):
                                "tangerine", "flamingo", "turquoise", "moonlight"),  # build 114's four
                # build 90: hints and glyphs; 91: the launch disc; 92: the category bar; 96: page buttons
                "hints_labels": ("1", "0", "badge"), "hints_layout": ("row", "column"),
-               "glyph_set": ("theme", "ripps2", "standard", "white"), "launch_disc": ("pop", "spin"),
+               "glyph_set": ("theme", "ripps2", "standard", "white"), "launch_disc": ("pop", "spin", "zoom", "off"),
                "category_font": ("ripps2", "theme"),
                "category_layout": ("row", "column", "sidebar", "menu"),  # build 115: menu; unset is menu too
                "category_transition": ("none", "fade", "flash"), "page_buttons": ("l2r2", "l1r1"),
