@@ -22,8 +22,8 @@ import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "themes")
 
-EDITION_DATE = "10/27/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
-EDITION_BUILD = 119          # the RIPPS2 build it was made and checked on
+EDITION_DATE = "10/29/2026"  # the date the RIPPS2 edition last changed: the theme pack's release date
+EDITION_BUILD = 122          # the RIPPS2 build it was made and checked on
 GLOSSARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "docs", "key_glossary.cfg")
 
 RULE = "# " + "=" * 102
@@ -72,6 +72,9 @@ sidebar_style=one_piece
 # RIPPS2 build 119: the sidebar stays on the info page (the user, 10/27: Adapt's info page leaves the bar its margin,
 # in both themes); a theme without that room leaves the key out and the sidebar waits for Left there
 info_sidebar=1
+# edition 122 (the user, 10/28): the main page shows covers, no disc, so the game's disc comes in as it launches
+# and zooms up to read clearly (RIPPS2 build 122; earlier builds pop it in); Flow and Grid > Launch Disc can change it
+launch_disc=zoom
 # RIPPS2 build 115: RIPPS2's own badges (RIPFLOW's set, with Players and the ESRB ratings), and its busy mark in the
 # corner, so the theme ships no badge folders and no loading frames
 badge_set=ripps2
